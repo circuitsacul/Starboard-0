@@ -62,3 +62,5 @@ This bot is easy to set up and get going. The following directions are very spec
      - requiredstars: Set default for required-stars
      - requiredtolose: Set default for required-to-lose
      - selfstar: Set default for self-star
+ - Utility
+   - recount: Recounts the emojis on a message.
