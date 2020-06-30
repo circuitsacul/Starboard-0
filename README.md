@@ -6,6 +6,7 @@ StarBot is an advanced, easy-to-use, reliable, 100% free, and highly customizabl
  - Supports multiple normal and custom emojis for *each* starboard
  - Easy to use configuration, with default settings and per-starboard settings
  - Completely free
+
 (I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, auto star channels, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.
 
 ## Setup:
