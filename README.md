@@ -20,10 +20,10 @@ This bot is easy to set up and get going. The following directions are very spec
 ## Other Settings You Can Change:
  - requiredStars: How many points it needs before it appears on your starboard. 
    - Specific Starboard: `sb channel requiredstars <channel_name> <number_of_stars>`
-   - Default Setting: 'sb defaults requiredstars <number_of_stars>`
+   - Default Setting: `sb defaults requiredstars <number_of_stars>`
  - requiredToLose: How *few* stars a message needs to have before it gets *removed* from a starboard.
-   - Specific Starboard: `sb channel requiredtolose <channel_name> <number_of_stars>
-   - Default Setting: `sb defaults requiredtolose <channel_name> <number_of_stars>
+   - Specific Starboard: `sb channel requiredtolose <channel_name> <number_of_stars>`
+   - Default Setting: `sb defaults requiredtolose <channel_name> <number_of_stars>`
  - selfStar: Wether or not a user can star their own messages.
    - Specific Starboard: `sb channel selfstar <channel> <true/false>`
    - Default Setting: `sb defaults selfstar <true/false>`
