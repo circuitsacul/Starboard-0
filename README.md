@@ -12,10 +12,10 @@ StarBot is an advanced, easy-to-use, reliable, free, and highly customizable dis
 ## Setup:
 This bot is easy to set up and get going. The following directions are very specific and mostly so you can see how it works, but also gives you an idea of how to configure it for your needs. If you need further help, you can join the [support server](https://discord.gg/3gK8mSA).
  1. [Invite](https://discord.com/api/oauth2/authorize?client_id=700796664276844612&permissions=117824&scope=bot) the bot to your server.
- 2. Create a channel called #starboard (or whatever you want to name it)
+ 2. Create a channel called `#starboard` by typing (or whatever you want to name it)
  3. Type `sb channel add <channel_name>` to add the starboard.
  4. Type `sb channel requiredstars 1` (Setting the number of stars for a message to get on the starboard to 1, so you can test it easily.
- 5. Type 'sb channel selfstar <channel_name> true` (This allows you to star your own messages, otherwise it would be hard to test the bot)
+ 5. Type `sb channel selfstar <channel_name> true` (This allows you to star your own messages, otherwise it would be hard to test the bot)
  6. Now, we need to add an emoji. In this case, we are going to use the `star` emoji. Type `sb channel emoji add <channel_name> :star:`
  7. Now send a message in the channel, and react with the `star` emoji. It should appear on the starboard!
 
