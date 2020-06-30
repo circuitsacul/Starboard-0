@@ -1,6 +1,10 @@
 # StarBot
 StarBot is an advanced, reliable, easy-to-use, free, and highly customizable starboard bot.
 
+[Invite the bot to your server](https://discord.com/api/oauth2/authorize?client_id=700796664276844612&permissions=117824&scope=bot)
+
+[Join the support server](https://discord.gg/3gK8mSA)
+
 ## Bot Features:
  - Supports multiple starboards
  - Supports multiple normal and custom emojis for *each* starboard
