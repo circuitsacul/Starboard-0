@@ -9,6 +9,12 @@ StarBot is an advanced, easy-to-use, reliable, free, and highly customizable dis
 
 (I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, auto star channels, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.
 
+## How to Read This:
+Don't literally type out `<, >, [, ]`.
+The words found insdie of those symboles are called arguments. `<this_is_an_argument>`. You are supposed to replace them with the value you want, and again, you don't actually type the symbols (`<, >, [, ]`) themselves.
+
+For example, say you wanted to make the bot repeat the word "hello" 10 times. The command to do this is `!repeat <word> [number_of_times=1]`. You would type `!repeat hello 10`. Notice how one of the arguments is inside of the `</>`, while another is inside of the `[/]`? The ones inside the square barackets are `optional arguments`. They have a default value, so you don't always have to type it out. For example, typing `!repeat hello` would repeat the word 1 time, because the default value for `number_of_times` is 1. The other argument, inside of the `</>`, is a required argument. If you don't set it, it will rasie an error.
+
 ## Setup:
 This bot is easy to set up and get going. The following directions are very specific and mostly so you can see how it works, but also gives you an idea of how to configure it for your needs. If you need further help, you can join the [support server](https://discord.gg/3gK8mSA).
  1. [Invite](https://discord.com/api/oauth2/authorize?client_id=700796664276844612&permissions=117824&scope=bot) the bot to your server.
