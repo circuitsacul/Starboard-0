@@ -173,11 +173,9 @@ async def handle_starboard(guild, channel_id, starboard_id, deleted, message_id,
     if starboard is None:
         return
 
-    nsfw = False
     starboard_settings = dbh.database.db['guilds'][guild.id]['channels'][starboard_id]
     if message is not None:
-        if not starboard_settings['nsfw'] and message.channel.is_nsfw():
-            nsfw = True
+        if not starboard.is_nsfw() and message.channel.is_nsfw():
             return
 
     if starboard_id in dbh.database.db['guilds'][guild.id]['messages'][(channel_id, message_id)]['links']:
