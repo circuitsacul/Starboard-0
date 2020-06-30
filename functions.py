@@ -91,6 +91,7 @@ async def recount_stars(guild, channel, message_id, bot):
 
 
 async def get_embed_from_message(message):
+    nsfw = message.channel.is_nsfw()
     embed = discord.Embed(colour=0xFCFF00)
     embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
     embed_text = ''
@@ -124,7 +125,7 @@ async def get_embed_from_message(message):
         full_string = value_string[0:800] + "...\n*message clipped*\n" + context_string
     else:
         full_string = value_string + context_string
-    embed.add_field(name='Message', value=full_string)
+    embed.add_field(name=f'Message{" (NSFW)" if nsfw else ""}', value=full_string)
 
     if len(urls) > 0:
         url_string = ''
@@ -154,7 +155,10 @@ async def new_link_message(original_message, starboard_channel, points, emojis):
     dbh.database.db['guilds'][guild.id]['messages'][(original_channel.id, original_message.id)]['links'][starboard_channel.id] = sent.id
     dbh.database.db['guilds'][guild.id]['channels'][starboard_channel.id]['messages'][sent.id] = (original_channel.id, original_message.id)
     for emoji in emojis:
-        await sent.add_reaction(emoji)
+        try:
+            await sent.add_reaction(emoji)
+        except Exception as e:
+            print(e)
 
 
 async def update_link_message(original_message, link_message, points, emojis):
@@ -165,7 +169,10 @@ async def update_link_message(original_message, link_message, points, emojis):
     else:
         await link_message.edit(content=f"**{points} points | deleted**")
     for emoji in emojis:
-        await link_message.add_reaction(emoji)
+        try:
+            await link_message.add_reaction(emoji)
+        except Exception as e:
+            print(e)
 
 
 async def handle_starboard(guild, channel_id, starboard_id, deleted, message_id, message, bot):
