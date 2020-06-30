@@ -36,3 +36,29 @@ This bot is easy to set up and get going. The following directions are very spec
  - Emojis: (Default is no emoji, and cannot be changed)
    - Add: `sb channel emoji add <channel> <emoji>`
    - Remove: `sb channel emoji remove <channel> <emoji>`
+
+## Complete Command List:
+ - No Category:
+   - help: Get help with commands
+   - info: Bot stats
+   - links: Get helpful links
+   - ping: Get bot latency 
+   - suggest: Send suggestion to me
+ - Settings:
+   - channel: List starboards
+     - add: Add a starboard
+     - remove: Remove a starboard
+     - emoji: Manage emojis
+       - add: Add emoji to starboard
+       - remove: Remove emoji from starboard
+     - linkdeletes: Set link-deletes for starboard
+     - linkedits: Set link-edits for starboard
+     - requiredstars: Set required-stars for starboard
+     - requiredtolose: Set required-to-lose for starboard
+     - selfstar: Set self-star for starboard
+   - defaults: View default settings for starboards
+     - linkdeletes: Set default for link-edits
+     - linkedits: Set default for link-deletes
+     - requiredstars: Set default for required-stars
+     - requiredtolose: Set default for required-to-lose
+     - selfstar: Set default for self-star
