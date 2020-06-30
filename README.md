@@ -1,5 +1,5 @@
 # StarBot
-StarBot is an advanced, easy-to-use, reliable, 100% free, and highly customizable starboard bot.
+StarBot is an advanced, easy-to-use, reliable, free, and highly customizable starboard bot.
 
 ## Bot Features:
  - Supports multiple starboards
