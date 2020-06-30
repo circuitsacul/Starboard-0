@@ -19,20 +19,20 @@ This bot is easy to set up and get going. The following directions are very spec
 
 ## Other Settings You Can Change:
  - requiredStars: How many points it needs before it appears on your starboard. 
-  * Specific Starboard: `sb channel requiredstars <channel_name> <number_of_stars>`
-  * Default Setting: 'sb defaults requiredstars <number_of_stars>`
+   - Specific Starboard: `sb channel requiredstars <channel_name> <number_of_stars>`
+   - Default Setting: 'sb defaults requiredstars <number_of_stars>`
  - requiredToLose: How *few* stars a message needs to have before it gets *removed* from a starboard.
-Specific Starboard: `sb channel requiredtolose <channel_name> <number_of_stars>
-Default Setting: `sb defaults requiredtolose <channel_name> <number_of_stars>
-selfStar: Wether or not a user can star their own messages.
-Specific Starboard: `sb channel selfstar <channel> <true/false>`
-Default Setting: `sb defaults selfstar <true/false>`
-linkEdits: Wether or not the starboard message should update if the original message get's edited.
-Specific Starboard: `sb channel linkedits <channel> <true/false>`
-Default Setting: `sb defaults linkedits <true/false>`
-linkDeletes: Whether or not the starboard message should be deleted if the original message is deleted.
-Specific Starboard: `sb channel linkdeltes <channel> <true/false>`
-Default Setting: `sb defaults linkdeletes <true/false>`
-Emojis: (Default is no emoji, and cannot be changed)
-Add: `sb channel emoji add <channel> <emoji>`
-Remove: `sb channel emoji remove <channel> <emoji>`
+   - Specific Starboard: `sb channel requiredtolose <channel_name> <number_of_stars>
+   - Default Setting: `sb defaults requiredtolose <channel_name> <number_of_stars>
+ - selfStar: Wether or not a user can star their own messages.
+   - Specific Starboard: `sb channel selfstar <channel> <true/false>`
+   - Default Setting: `sb defaults selfstar <true/false>`
+ - linkEdits: Wether or not the starboard message should update if the original message get's edited.
+   - Specific Starboard: `sb channel linkedits <channel> <true/false>`
+   - Default Setting: `sb defaults linkedits <true/false>`
+ - linkDeletes: Whether or not the starboard message should be deleted if the original message is deleted.
+   - Specific Starboard: `sb channel linkdeltes <channel> <true/false>`
+   - Default Setting: `sb defaults linkdeletes <true/false>`
+ - Emojis: (Default is no emoji, and cannot be changed)
+   - Add: `sb channel emoji add <channel> <emoji>`
+   - Remove: `sb channel emoji remove <channel> <emoji>`
