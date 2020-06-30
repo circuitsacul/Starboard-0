@@ -10,10 +10,13 @@ StarBot is an advanced, easy-to-use, reliable, free, and highly customizable dis
 (I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, auto star channels, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.
 
 ## How to Read This:
-Don't literally type out `<, >, [, ]`.
-The words found inside of those symbols are called arguments. `<this_is_an_argument>`. You are supposed to replace them with the value you want, and again, you don't type the symbols (`<, >, [, ]`) themselves.
+Some things you should know before reading this section:
+ - Don't actually type `<, >, [, ]`
+ - Words found inside of these symbols (`[argument]]` or `<argument>`) are called arguments.
+ - Arguments inside square brackets (`[argument]`) are optional arguments. You *can* set them, but you don't *have* to.
+ - Arguments inside `<. >` (`<argument>`) are required arguments. You *must* set these, and not doing so will cause an error
 
-For example, say you wanted to make the bot repeat the word "hello" 10 times. The command to do this is `!repeat <word> [number_of_times=1]`. You would type `!repeat hello 10`. Notice how one of the arguments is inside of the `</>`, while another is inside of the `[/]`? The ones inside the square brackets are `optional arguments`. They have a default value, so you don't always have to type it out. For example, typing `!repeat hello` would repeat the word 1 time, because the default value for `number_of_times` is 1. The other argument, inside of the `</>`, is a required argument. If you don't set it, it will raise an error.
+Here is an example command: Say you wanted to make the bot repeat the word "hello" 10 times. The command to do this is `!repeat <word> [number_of_times=1]`. You would type `!repeat hello 10`. Notice how one of the arguments is inside of the `</>`, while another is inside of the `[/]`? The ones inside the square brackets are `optional arguments`. They have a default value, so you don't always have to type it out. For example, typing `!repeat hello` would repeat the word 1 time, because the default value for `number_of_times` is 1. The other argument, inside of the `</>`, is a required argument. If you don't set it, it will raise an error.
 
 ## Setup:
 This bot is easy to set up and get going. The following directions are very specific and mostly so you can see how it works, but also gives you an idea of how to configure it for your needs. If you need further help, you can join the [support server](https://discord.gg/3gK8mSA).
