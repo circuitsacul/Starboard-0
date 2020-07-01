@@ -1,5 +1,5 @@
 # StarBot
-StarBot is an advanced, reliable, free, easy-to-use, and highly customizable starboard bot.
+StarBot is a free, easy-to-use, and highly-customizable starboard bot. This documentation gives you a quick start to using the bot, as well as listing all the available commands. If you see a problem, please let me know. You can use the bots `suggest` command, or you can join the support server. My discord username is `CircuitSacul#5585`.
 
 [Invite the bot to your server](https://discord.com/api/oauth2/authorize?client_id=700796664276844612&permissions=117824&scope=bot)
 
@@ -11,7 +11,7 @@ StarBot is an advanced, reliable, free, easy-to-use, and highly customizable sta
  - Easy to use configuration, with default settings and per-starboard settings
  - Completely free
 
-(I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, auto star channels, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.
+(I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, media-only channels, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.
 
 ## How to Read This:
 Some things you should know before reading this section:
@@ -28,56 +28,56 @@ Here is an example command: Say you wanted to make the bot repeat the word "hell
 This bot is easy to set up and get going. The following directions are very specific and mostly so you can see how it works, but also gives you an idea of how to configure it for your needs. If you need further help, you can join the [support server](https://discord.gg/3gK8mSA).
  1. [Invite](https://discord.com/api/oauth2/authorize?client_id=700796664276844612&permissions=117824&scope=bot) the bot to your server.
  2. Create a channel called `#starboard` by typing (or whatever you want to name it)
- 3. Type `sb channel add <channel_name>` to add the starboard.
- 4. Type `sb channel requiredstars 1` (Setting the number of stars for a message to get on the starboard to 1, so you can test it easily.
- 5. Type `sb channel selfstar <channel_name> true` (This allows you to star your own messages, otherwise it would be hard to test the bot)
- 6. Now, we need to add an emoji. In this case, we are going to use the `star` emoji. Type `sb channel emoji add <channel_name> :star:`
+ 3. Type `sb channel add <channel>` to add the starboard.
+ 4. Type `sb channel requiredstars <starboard> 1` (Setting the number of stars for a message to get on the starboard to 1, so you can test it easily.
+ 5. Type `sb channel selfstar <starboard> true` (This allows you to star your own messages, otherwise it would be hard to test the bot)
+ 6. Now, we need to add an emoji. In this case, we are going to use the `star` emoji. Type `sb channel emoji add <starboard> :star:`
  7. Now send a message in the channel, and react with the `star` emoji. It should appear on the starboard!
 
 ## Other Settings You Can Change:
  - requiredStars: How many points it needs before it appears on your starboard. 
-   - Specific Starboard: `sb channel requiredstars <channel_name> <number_of_stars>`
+   - Specific Starboard: `sb channel requiredstars <starboard> <number_of_stars>`
    - Default Setting: `sb defaults requiredstars <number_of_stars>`
  - requiredToLose: How *few* stars a message needs to have before it gets *removed* from a starboard.
-   - Specific Starboard: `sb channel requiredtolose <channel_name> <number_of_stars>`
-   - Default Setting: `sb defaults requiredtolose <channel_name> <number_of_stars>`
+   - Specific Starboard: `sb channel requiredtolose <starboard> <number_of_stars>`
+   - Default Setting: `sb defaults requiredtolose <number_of_stars>`
 - selfStar: Wether or not a user can star their own messages.	
-   - Specific Starboard: `sb channel selfstar <channel> <true/false>`	
-   - Default Setting: `sb defaults selfstar <true/false>`	
+   - Specific Starboard: `sb channel selfstar <starboard> <true|false>`	
+   - Default Setting: `sb defaults selfstar <true|false>`	
  - linkEdits: Wether or not the starboard message should update if the original message get's edited.	
-   - Specific Starboard: `sb channel linkedits <channel> <true/false>`	
-   - Default Setting: `sb defaults linkedits <true/false>`	
+   - Specific Starboard: `sb channel linkedits <starboard> <true|false>`	
+   - Default Setting: `sb defaults linkedits <true|false>`	
  - linkDeletes: Whether or not the starboard message should be deleted if the original message is deleted.	
-   - Specific Starboard: `sb channel linkdeltes <channel> <true/false>`	
-   - Default Setting: `sb defaults linkdeletes <true/false>`	
+   - Specific Starboard: `sb channel linkdeltes <starboard> <true|false>`	
+   - Default Setting: `sb defaults linkdeletes <true|false>`	
  - Emojis: (Default is no emoji, and cannot be changed)	
-   - Add: `sb channel emoji add <channel> <emoji>`	
-   - Remove: `sb channel emoji remove <channel> <emoji>`	
+   - Add: `sb channel emoji add <starboard> <emoji>`	
+   - Remove: `sb channel emoji remove <starboard> <emoji>`	
 
 ## Complete Command List:	
  - No Category:	
-   - help: Get help with commands	
-   - info: Bot stats	
-   - links: Get helpful links	
-   - ping: Get bot latency 	
-   - suggest: Send suggestion to me	
+   - help: Get help with commands `help [commands|category]`
+   - info: Bot stats	`info`
+   - links: Get helpful links	`links`
+   - ping: Get bot latency `ping`
+   - suggest: Send suggestion to me	`suggest <suggestion>`
  - Settings:	
-   - channel: List starboards	
-     - add: Add a starboard	
-     - remove: Remove a starboard	
-     - emoji: Manage emojis	
-       - add: Add emoji to starboard	
-       - remove: Remove emoji from starboard	
-     - linkdeletes: Set link-deletes for starboard	
-     - linkedits: Set link-edits for starboard	
-     - requiredstars: Set required-stars for starboard	
-     - requiredtolose: Set required-to-lose for starboard	
-     - selfstar: Set self-star for starboard	
-   - defaults: View default settings for starboards	
-     - linkdeletes: Set default for link-edits	
-     - linkedits: Set default for link-deletes	
-     - requiredstars: Set default for required-stars	
-     - requiredtolose: Set default for required-to-lose	
-     - selfstar: Set default for self-star	
+   - channel: List starboards	`channel`
+     - add: Add a starboard	`channel add <channel>`
+     - remove: Remove a starboard	`channel remove <starboard>`
+     - emoji: Manage emojis
+       - add: Add emoji to starboard	`channel emoji add <starboard> <emoji>`
+       - remove: Remove emoji from starboard	`channel emoji remove <starboard> <emoji>`
+     - linkdeletes: Set link-deletes for starboard	`channel linkdeletes <starboard> <true|false>`
+     - linkedits: Set link-edits for starboard	`channel linkedits <starboard> <true|false>`
+     - requiredstars: Set required-stars for starboard	`channel requiredstars <starboard> <required_stars>`
+     - requiredtolose: Set required-to-lose for starboard	`channel requiredtolose <starboard> <required_to_lose>`
+     - selfstar: Set self-star for starboard	`channel selfstar <starboard> <true|false>`
+   - defaults: View default settings for starboards	`defaults`
+     - linkdeletes: Set default for link-edits	`defaults linkdeletes <true|false>`
+     - linkedits: Set default for link-deletes	`defaults linkedits <true|false>`
+     - requiredstars: Set default for required-stars	`defaults requiredstars <required_stars>`
+     - requiredtolose: Set default for required-to-lose	`defaults requiredtolose <required_to_lose>`
+     - selfstar: Set default for self-star	`defaults selfstar <true|false>`
  - Utility	
-   - recount: Recounts the emojis on a message.
+   - recount: Recounts the emojis on a message `recount <channel> <message_id>`
