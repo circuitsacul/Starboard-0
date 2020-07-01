@@ -249,7 +249,7 @@ async def handle_media_channel(guild, channel_id, message):
     settings = dbh.database.db['guilds'][guild.id]['media_channels'][channel_id]
 
     if settings['media_only']:
-        if len(message.attachments) == 0:
+        if len(message.attachments) == 0 and len(message.embeds) == 0:
             channel = utils.get(guild.channels, id=channel_id)
             string = f"{message.author.mention}, this is a media-only channel. Only messages with attachments are allowed."
             try:
