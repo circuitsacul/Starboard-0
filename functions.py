@@ -5,12 +5,6 @@ import asyncio
 from asyncio import Lock, sleep
 
 
-async def future_delete_msg(target, embed=None, content='', delay=3):
-    msg = await target.send(content, embed=embed)
-    await sleep(delay)
-    await msg.delete()
-
-
 async def parse_user(guild_id, user_id, bot):
     if guild_id not in dbh.database.db['guilds']:
         return False
@@ -260,13 +254,12 @@ async def handle_media_channel(guild, channel_id, message):
                     is_valid = False
 
         if not is_valid:
-            channel = utils.get(guild.channels, id=channel_id)
-            string = f"{message.author.mention}, this is a media-only channel. Only messages with attachments are allowed."
+            string = f"{message.author.mention}, that channel is a media-only channel. Only messages with attachments are allowed."
             try:
                 await message.delete()
             except Exception as e:
                 print(e)
-            await future_delete_msg(channel, content=string)
+            await message.author.send(string)
             return
 
     for emoji in settings['emojis']:
