@@ -257,6 +257,7 @@ async def handle_media_channel(guild, channel_id, message):
             except Exception as e:
                 print(e)
             await future_delete_msg(channel, content=string)
+            return
 
     for emoji in settings['emojis']:
         try:
