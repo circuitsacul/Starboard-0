@@ -11,7 +11,7 @@ StarBot is a free, easy-to-use, and highly-customizable starboard bot. This docu
  - Easy to use configuration, with default settings and per-starboard settings
  - Completely free
 
-(I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, auto star channels, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.
+(I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, media-only channels, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.
 
 ## How to Read This:
 Some things you should know before reading this section:
