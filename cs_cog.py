@@ -11,7 +11,7 @@ class Settings(commands.Cog):
 
     @commands.group(
         name='defaults', aliases=['d'], description='Set the default settings when starboards are added',
-        brief='Manage default settings'
+        brief='Manage default starboard settings'
         )
     @commands.guild_only()
     async def defaults(self, ctx):
@@ -98,7 +98,7 @@ class Settings(commands.Cog):
 
 
     @commands.group(
-        name='channel', aliases=['c'], invoke_without_command=True, description='Managed starboards',
+        name='starboard', aliases=['s'], invoke_without_command=True, description='Managed starboards',
         brief='Manage starboards'
         )
     @commands.guild_only()
@@ -185,7 +185,7 @@ class Settings(commands.Cog):
             return
 
         try:
-            x = dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]
+            dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]
         except KeyError:
             if ctx.guild.id not in dbh.database.locks:
                 dbh.database.locks[ctx.guild.id] = Lock()
@@ -281,7 +281,7 @@ class Settings(commands.Cog):
 
 
     @channel.command(
-        name='requiredtolose', aliases=['rtl'], description='Set minimu stars before message is removed for specific starboard',
+        name='requiredtolose', aliases=['rtl'], description='Set minimum stars before message is removed for specific starboard',
         brief='Set required-to-lose for starboard'
         )
     @commands.has_permissions(manage_channels=True)
@@ -297,3 +297,125 @@ class Settings(commands.Cog):
                 return
             dbh.database.db['guilds'][ctx.message.guild.id]['channels'][channel.id]['required_to_lose'] = count
         await ctx.send(f"requiredToLose has been set to {count}")
+
+    @commands.group(
+        name='mediachannel', aliases=['mc'], description='Manage media channels, where the bot automatically reacts to messages with an emoji.',
+        brief='Manage media channels', invoke_without_command=True
+        )
+    @commands.guild_only()
+    async def media_channels(self, ctx, channel: discord.TextChannel=None):
+        string = ''
+        if channel is None:
+            if ctx.guild.id not in dbh.database.locks:
+                dbh.database.locks[ctx.guild.id] = Lock()
+            async with dbh.database.locks[ctx.guild.id]:
+                for media_channel_id in dbh.database.db['guilds'][ctx.guild.id]['media_channels']:
+                    media_channel = discord.utils.get(ctx.guild.channels, id=media_channel_id)
+                    if media_channel is None:
+                        del dbh.database.db['guilds'][ctx.guild.id]['media_channels'][media_channel_id]
+                        continue
+                    emojis = dbh.database.db['guilds'][ctx.guild.id]['media_channels'][media_channel_id]['emojis']
+                    string += f"{media_channel.mention}: {emojis}\n"
+                if string == '':
+                    string = "You have no media channels set. Use `sb mediachannel add <channel>` to add one."
+        else:
+            settings = dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]
+            emojis = settings['emojis']
+            string = f"{channel.mention}: {emojis}\n----mediaOnly: {settings['media_only']}"
+        await ctx.send(string)
+
+    @media_channels.command(
+        name='add', aliases=['a', '+'], brief='Add a media channel', description='Add a media channel'
+    )
+    @commands.has_permissions(manage_channels=True)
+    async def add_media_channel(self, ctx, channel: discord.TextChannel):
+        if channel is None:
+            await ctx.send("I could not find a channel with that name or id")
+            return
+        if channel.id in dbh.database.db['guilds'][ctx.guild.id]['media_channels']:
+            await ctx.send("That is already a media channel")
+            return
+        if ctx.guild.id not in dbh.database.locks:
+            dbh.database.locks[ctx.guild.id] = Lock()
+        async with dbh.database.locks[ctx.guild.id]:
+            dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id] = {
+                'emojis': [],
+                'media_only': False
+            }
+            await ctx.send("Added media channel")
+
+    @media_channels.command(
+        name='remove', aliases=['r', '-'], brief='Remove media channel', description='Remove media channel'
+    )
+    @commands.has_permissions(manage_channels=True)
+    async def remove_media_channel(self, ctx, channel: discord.TextChannel):
+        if channel is None:
+            await ctx.send("I could not find a channel with that name or id")
+            return
+        #if isinstance(channel, int):
+        #    channel = discord.utils.get(ctx.guild.channels, id=channel)
+        if ctx.guild.id not in dbh.database.locks:
+            dbh.database.locks[ctx.guild.id] = Lock()
+        async with dbh.database.locks[ctx.guild.id]:
+            if channel.id not in dbh.database.db['guilds'][ctx.guild.id]['media_channels']:
+                await ctx.send("That does not appear to be a media channel")
+                return
+            del dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]
+            await ctx.send(f"{channel.mention} is no longer a media channel")
+
+    @media_channels.command(
+        name='addemoji', aliases=['ae'], brief='Add an emoji to media channel',
+        description='Adds an emoji for the bot to automatically react to all messages sent in the media channel'
+    )
+    @commands.has_permissions(manage_channels=True)
+    async def media_channel_add_emoji(self, ctx, channel: discord.TextChannel, emoji):
+        if channel is None:
+            await ctx.send("I could not find a channel with that name or id")
+            return
+        if ctx.guild.id not in dbh.database.locks:
+            dbh.database.locks[ctx.guild.id] = Lock()
+        async with dbh.database.locks[ctx.guild.id]:
+            if channel.id not in dbh.database.db['guilds'][ctx.guild.id]['media_channels']:
+                await ctx.send("That is not a media channel")
+                return
+            dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis'].append(emoji)
+            await ctx.send(f"Added {emoji} to {channel.mention}")
+
+    @media_channels.command(
+        name='removeemoji', aliases=['re'], brief='Remove an emoji from media channel',
+        description='Remove an emoji from media channel'
+    )
+    @commands.has_permissions(manage_channels=True)
+    async def media_channel_remove_emoji(self, ctx, channel: discord.TextChannel, emoji):
+        if channel is None:
+            await ctx.send("I could not find a channel with that name or id")
+            return
+        if ctx.guild.id not in dbh.database.locks:
+            dbh.database.locks[ctx.guild.id] = Lock()
+        async with dbh.database.locks[ctx.guild.id]:
+            if channel.id not in dbh.database.db['guilds'][ctx.guild.id]['media_channels']:
+                await ctx.send("That is not a media channel")
+                return
+            if emoji not in dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis']:
+                await ctx.send("That emoji does not appear to be in the media channel")
+                return
+            dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis'].remove(emoji)
+            await ctx.send(f"Removed {emoji} from {channel.mention}")
+
+    @media_channels.command(
+        name='mediaonly', aliases=['mo', 'imagesonly'], brief='Set mediaOnly for media channel',
+        description='Set wether or not a media channel allows messages without images'
+    )
+    @commands.has_permissions(manage_channels=True, manage_messages=True)
+    async def media_channel_media_only(self, ctx, channel: discord.TextChannel, allow: bool):
+        if channel is None:
+            await ctx.send("I could not find a channel with that name or id")
+            return
+        if ctx.guild.id not in dbh.database.locks:
+            dbh.database.locks[ctx.guild.id] = Lock()
+        async with dbh.database.locks[ctx.guild.id]:
+            if channel.id not in dbh.database.db['guilds'][ctx.guild.id]['media_channels']:
+                await ctx.send("That is not a media channel")
+                return
+            dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['media_only'] = allow
+            await ctx.send(f"Set mediaOnly to {allow} for {channel.mention}")

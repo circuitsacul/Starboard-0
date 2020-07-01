@@ -54,6 +54,8 @@ class DataBase():
             for channel_id in self.db['guilds'][guild.id]['channels']:
                 if 'nsfw' not in self.db['guilds'][guild.id]['channels'][channel_id]:
                     self.db['guilds'][guild.id]['channels'][channel_id]['nsfw'] = False
+            if 'media_channels' not in self.db['guilds'][guild.id]:
+                self.db['guilds'][guild.id]['media_channels'] = {}
 
     def save_database(self):
         with open(self.path, 'wb') as f:

@@ -2,7 +2,13 @@ import db_handler as dbh
 from discord import utils
 import discord
 import asyncio
-from asyncio import Lock
+from asyncio import Lock, sleep
+
+
+async def future_delete_msg(target, embed=None, content='', delay=3):
+    msg = await target.send(content, embed=embed)
+    await sleep(delay)
+    await msg.delete()
 
 
 async def parse_user(guild_id, user_id, bot):
@@ -237,6 +243,26 @@ async def handle_starboard(guild, channel_id, starboard_id, deleted, message_id,
             await update_link_message(message, link_message, points, starboard_settings['emojis'])
     elif add:
         await new_link_message(message, starboard, points, starboard_settings['emojis'])
+
+
+async def handle_media_channel(guild, channel_id, message):
+    settings = dbh.database.db['guilds'][guild.id]['media_channels'][channel_id]
+
+    if settings['media_only']:
+        if len(message.attachments) == 0:
+            channel = utils.get(guild.channels, id=channel_id)
+            string = f"{message.author.mention}, this is a media-only channel. Only messages with attachments are allowed."
+            try:
+                await message.delete()
+            except Exception as e:
+                print(e)
+            await future_delete_msg(channel, content=string)
+
+    for emoji in settings['emojis']:
+        try:
+            await message.add_reaction(emoji)
+        except Exception as e:
+            print(e)
 
 
 async def update_message(guild_id, channel_id, message_id, bot):
