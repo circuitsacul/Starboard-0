@@ -43,10 +43,6 @@ class DataBase():
         with open(self.path, 'rb') as f:
             self.db = pickle.load(f)
         # checks
-        if 'bots' in self.db:
-            del self.db['bots']
-        if 'users' in self.db:
-            del self.db['users']
         for guild in guilds:
             self.add_guild(guild.id)
 
