@@ -1,5 +1,5 @@
 # StarBot
-StarBot is a free, easy-to-use, and highly-customizable starboard bot. This documentation gives you a quick start to using the bot, as well as listing all the available commands. If you see a problem, please let me know. You can use the bots `suggest` command, or you can join the support server. My discord username is `CircuitSacul#5585`.
+StarBot is a free, advanced, and highly-customizable starboard bot. This documentation gives you a quick start to using the bot, as well as listing all the available commands. If you see a problem, please let me know. You can use the bots `suggest` command, or you can join the support server. My discord username is `CircuitSacul#5585`.
 
 [Invite the bot to your server](https://discord.com/api/oauth2/authorize?client_id=700796664276844612&permissions=117824&scope=bot)
 
@@ -9,9 +9,11 @@ StarBot is a free, easy-to-use, and highly-customizable starboard bot. This docu
  - Supports multiple starboards
  - Supports multiple normal and custom emojis for *each* starboard
  - Easy to use configuration, with default settings and per-starboard settings
+ - Image-only channels
+ - Auto-star channels
  - Completely free
 
-(I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, media-only channels, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.
+(I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.)
 
 ## How to Read This:
 Some things you should know before reading this section:
@@ -74,10 +76,16 @@ This bot is easy to set up and get going. The following directions are very spec
      - requiredtolose: Set required-to-lose for starboard	`channel requiredtolose <starboard> <required_to_lose>`
      - selfstar: Set self-star for starboard	`channel selfstar <starboard> <true|false>`
    - defaults: View default settings for starboards	`defaults`
-     - linkdeletes: Set default for link-edits	`defaults linkdeletes <true|false>`
-     - linkedits: Set default for link-deletes	`defaults linkedits <true|false>`
-     - requiredstars: Set default for required-stars	`defaults requiredstars <required_stars>`
-     - requiredtolose: Set default for required-to-lose	`defaults requiredtolose <required_to_lose>`
-     - selfstar: Set default for self-star	`defaults selfstar <true|false>`
+     - linkdeletes: Set default for linkEdits	`defaults linkdeletes <true|false>`
+     - linkedits: Set default for linkDeletes	`defaults linkedits <true|false>`
+     - requiredstars: Set default for requiredStars	`defaults requiredstars <required_stars>`
+     - requiredtolose: Set default for requiredToLose	`defaults requiredtolose <required_to_lose>`
+     - selfstar: Set default for selfStar	`defaults selfstar <true|false>`
+   - mediachannel: List all media-channels `mediachannel`
+     - add: Add a new media channel `mediachannel add <channel>`
+     - remove: Remove a media channel `mediachannel remove <channel>`
+     - mediaonly: Wether or not to delete messages that don't include attachments `mediachannel mediaonly <channel> <true|false>`
+     - addemoji: Adds an emoji for the bot to automatically to react to all messages in channel with `mediachannel addemoji <channel> <emoji>`
+     - removeemoji: Removes an emoji from media channel `mediachannel removeemoji <channel> <emoji>`
  - Utility	
    - recount: Recounts the emojis on a message `recount <channel> <message_id>`
