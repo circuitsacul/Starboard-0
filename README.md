@@ -81,5 +81,11 @@ This bot is easy to set up and get going. The following directions are very spec
      - requiredstars: Set default for required-stars	`defaults requiredstars <required_stars>`
      - requiredtolose: Set default for required-to-lose	`defaults requiredtolose <required_to_lose>`
      - selfstar: Set default for self-star	`defaults selfstar <true|false>`
+   - mediachannel: List all media-channels `mediachannel`
+     - add: Add a new media channel `mediachannel add <channel>`
+     - remove: Remove a media channel `mediachannel remove <channel>`
+     - mediaonly: Wether or not to delete messages that don't include attachments `mediachannel mediaonly <channel> <true|false>`
+     - addemoji: Adds an emoji for the bot to automatically to react to all messages in channel with `mediachannel addemoji <channel> <emoji>`
+     - removeemoji: Removes an emoji from media channel `mediachannel removeemoji <channel> <emoji>`
  - Utility	
    - recount: Recounts the emojis on a message `recount <channel> <message_id>`
