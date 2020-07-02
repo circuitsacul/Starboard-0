@@ -43,19 +43,12 @@ class DataBase():
         with open(self.path, 'rb') as f:
             self.db = pickle.load(f)
         # checks
-        if 'bots' not in self.db:
-            self.db['bots'] = {}
+        if 'bots' in self.db:
+            del self.db['bots']
         if 'users' in self.db:
             del self.db['users']
-        if 'profiles' not in self.db:
-            self.db['profiles'] = {}
         for guild in guilds:
             self.add_guild(guild.id)
-            for channel_id in self.db['guilds'][guild.id]['channels']:
-                if 'nsfw' not in self.db['guilds'][guild.id]['channels'][channel_id]:
-                    self.db['guilds'][guild.id]['channels'][channel_id]['nsfw'] = False
-            if 'media_channels' not in self.db['guilds'][guild.id]:
-                self.db['guilds'][guild.id]['media_channels'] = {}
 
     def save_database(self):
         with open(self.path, 'wb') as f:
