@@ -100,11 +100,11 @@ async def on_command_error(ctx, error):
         pass
     else:
         embed = discord.Embed(title='Error!', description='An unexpected error ocurred. Please report this to the dev.', color=discord.Color.red())
-        embed.add_field(name='Error Message:', value=f"{type(error)}: {error}")
+        embed.add_field(name='Error Message:', value=f"```{type(error)}:\n {error}```")
         print(f"Error: {error}")
         await ctx.send(embed=embed)
         return
-    embed = discord.Embed(title='Oops!', description=str(error), color=discord.Color.orange())
+    embed = discord.Embed(title='Oops!', description=f"```{error}```", color=discord.Color.orange())
     await ctx.send(embed=embed)
 
 
