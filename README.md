@@ -9,9 +9,11 @@ StarBot is a free, advanced, and highly-customizable starboard bot. This documen
  - Supports multiple starboards
  - Supports multiple normal and custom emojis for *each* starboard
  - Easy to use configuration, with default settings and per-starboard settings
+ - Image-only channels
+ - Auto-star channels
  - Completely free
 
-(I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, media-only channels, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.
+(I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.)
 
 ## How to Read This:
 Some things you should know before reading this section:
