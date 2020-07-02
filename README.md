@@ -76,11 +76,11 @@ This bot is easy to set up and get going. The following directions are very spec
      - requiredtolose: Set required-to-lose for starboard	`channel requiredtolose <starboard> <required_to_lose>`
      - selfstar: Set self-star for starboard	`channel selfstar <starboard> <true|false>`
    - defaults: View default settings for starboards	`defaults`
-     - linkdeletes: Set default for link-edits	`defaults linkdeletes <true|false>`
-     - linkedits: Set default for link-deletes	`defaults linkedits <true|false>`
-     - requiredstars: Set default for required-stars	`defaults requiredstars <required_stars>`
-     - requiredtolose: Set default for required-to-lose	`defaults requiredtolose <required_to_lose>`
-     - selfstar: Set default for self-star	`defaults selfstar <true|false>`
+     - linkdeletes: Set default for linkEdits	`defaults linkdeletes <true|false>`
+     - linkedits: Set default for linkDeletes	`defaults linkedits <true|false>`
+     - requiredstars: Set default for requiredStars	`defaults requiredstars <required_stars>`
+     - requiredtolose: Set default for requiredToLose	`defaults requiredtolose <required_to_lose>`
+     - selfstar: Set default for selfStar	`defaults selfstar <true|false>`
    - mediachannel: List all media-channels `mediachannel`
      - add: Add a new media channel `mediachannel add <channel>`
      - remove: Remove a media channel `mediachannel remove <channel>`
