@@ -15,8 +15,6 @@ class Settings(commands.Cog):
         )
     @commands.guild_only()
     async def defaults(self, ctx):
-        if ctx.author.bot:
-            return
         if ctx.invoked_subcommand == None:
             settings = dbh.database.db['guilds'][ctx.guild.id]['default_settings']
             msg = ''
@@ -103,8 +101,6 @@ class Settings(commands.Cog):
         )
     @commands.guild_only()
     async def channel(self, ctx, channel:discord.TextChannel=None):
-        if ctx.author.bot:
-            return
         if ctx.invoked_subcommand == None:
             msg = ''
             if channel is None:
@@ -218,21 +214,11 @@ class Settings(commands.Cog):
             await ctx.send("That channel is not a starboard")
 
 
-    @channel.group(
-        name='emoji', aliases=['e'], description='Manage emojis for specific starboard',
-        brief='Manage emojis'
-        )
-    @commands.has_permissions(manage_channels=True)
-    async def emoji(self, ctx):
-        if ctx.author.bot:
-            return
-
-
-    @emoji.command(
-        name='add', aliases=['+', 'a'], description='Add emoji for specific starboard',
+    @channel.command(
+        name='addemoji', aliases=['ae'], description='Add emoji for specific starboard',
         brief='Add emoji'
         )
-    async def add_emoji(self, ctx, channel: discord.TextChannel, emoji):
+    async def starboard_add_emoji(self, ctx, channel: discord.TextChannel, emoji):
         try:
             if ctx.guild.id not in dbh.database.locks:
                 dbh.database.locks[ctx.guild.id] = Lock()
@@ -243,11 +229,11 @@ class Settings(commands.Cog):
             await ctx.send(f"{channel.mention} is not a starboard.")
 
 
-    @emoji.command(
-        name='remove', aliases=['-', 'r'], description='Removed emoji for specific starboard',
+    @channel.command(
+        name='removeemoji', aliases=['re'], description='Removed emoji for specific starboard',
         brief='Remove emoji'
         )
-    async def remove_emoji(self, ctx, channel: discord.TextChannel, emoji):
+    async def starboard_remove_emoji(self, ctx, channel: discord.TextChannel, emoji):
         try:
             if ctx.guild.id not in dbh.database.locks:
                 dbh.database.locks[ctx.guild.id] = Lock()
