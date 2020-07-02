@@ -9,6 +9,24 @@ class Settings(commands.Cog):
         self.bot = bot
 
 
+    @commands.command(
+        name='prefix', aliases=['p'], brief='Set prefix',
+        description='Set prefix for server'
+    )
+    @commands.guild_only()
+    @commands.has_permissions(manage_messages=True)
+    async def set_prefix(self, ctx, prefix, space: bool = False):
+        if prefix == '':
+            await ctx.send("That cannot be the prefix")
+            return
+        new_prefix = f"{prefix}{' ' if space else ''}"
+        if ctx.guild.id not in dbh.database.locks:
+            dbh.database.locks[ctx.guild.id] = Lock()
+        async with dbh.database.locks[ctx.guild.id]:
+            dbh.database.db['guilds'][ctx.guild.id]['prefix'] = new_prefix
+        await ctx.send(f"Set prefix to `{new_prefix}`")
+
+
     @commands.group(
         name='defaults', aliases=['d'], description='Set the default settings when starboards are added',
         brief='Manage default starboard settings'

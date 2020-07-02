@@ -10,8 +10,8 @@ from pretty_help import PrettyHelp
 import functions
 from secrets import TOKEN, BETA_TOKEN, OWNER_ID, INVITE, SUPPORT_SERVER, SUPPORT_ID, SUGGESTION_CHANNEL
 
-PREFIXES = commands.when_mentioned_or('sb ', 'sb.')
-BETA_PREFIXES = commands.when_mentioned_or('beta ')
+PREFIXES = functions.get_prefix
+BETA_PREFIXES = functions.get_prefix
 
 DOWNVOTE = '⬇️'
 UPVOTE = '⬆️'

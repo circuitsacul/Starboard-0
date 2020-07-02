@@ -5,6 +5,11 @@ import asyncio
 from asyncio import Lock, sleep
 
 
+async def get_prefix(bot, message):
+    prefix = dbh.database.db['guilds'][message.guild.id]['prefix']
+    return discord.ext.commands.when_mentioned_or(prefix)(bot, message)
+
+
 async def parse_user(guild_id, user_id, bot):
     if guild_id not in dbh.database.db['guilds']:
         return False
