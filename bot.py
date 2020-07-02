@@ -241,16 +241,21 @@ async def on_message_edit(ctx, message):
 
 @bot.event
 async def on_message(message):
+    is_valid = True
+
+    if message.guild is not None:
+        if message.channel.id in dbh.database.db['guilds'][message.guild.id]['media_channels']:
+            is_valid = await functions.handle_media_channel(message.guild, message.channel.id, message)
+
     if message.author.bot:
         return
-    if message.content != '':
+
+    if message.content != '' and is_valid:
         if bot.user.mention == message.content.split()[0].replace('!', '') and len(message.content.split()) == 1:
             await message.channel.send("You can call `sb help` to get help with commands. You can also call `sb links` to get a link to the support server.")
         else:
             await bot.process_commands(message)
 
-    if message.channel.id in dbh.database.db['guilds'][message.guild.id]['media_channels']:
-        await functions.handle_media_channel(message.guild, message.channel.id, message)
 
 
 try:

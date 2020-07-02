@@ -242,9 +242,9 @@ async def handle_starboard(guild, channel_id, starboard_id, deleted, message_id,
 async def handle_media_channel(guild, channel_id, message):
     settings = dbh.database.db['guilds'][guild.id]['media_channels'][channel_id]
 
-    if settings['media_only']:
-        is_valid = True
+    is_valid = True
 
+    if settings['media_only']:
         if len(message.attachments) == 0:
             is_valid = False
 
@@ -262,6 +262,8 @@ async def handle_media_channel(guild, channel_id, message):
             await message.add_reaction(emoji)
         except Exception as e:
             print(e)
+
+    return is_valid
 
 
 async def update_message(guild_id, channel_id, message_id, bot):
