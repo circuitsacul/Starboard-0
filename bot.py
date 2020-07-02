@@ -94,10 +94,18 @@ async def on_command_error(ctx, error):
     if ctx.author.bot:
         print(f"Error (invoked by bot): {error}")
         return
-    if type(error) is discord.ext.commands.errors.CommandNotFound:
+    elif type(error) is discord.ext.commands.errors.CommandNotFound:
         return
-    print(f"Error: {error}")
-    await ctx.send(error)
+    elif type(error) is discord.ext.commands.errors.BadArgument:
+        pass
+    else:
+        embed = discord.Embed(title='Error!', description='An unexpected error ocurred. Please report this to the dev.', color=discord.Color.red())
+        embed.add_field(name='Error Message:', value=f"{type(error)}: {error}")
+        print(f"Error: {error}")
+        await ctx.send(embed=embed)
+        return
+    embed = discord.Embed(title='Oops!', description=str(error), color=discord.Color.orange())
+    await ctx.send(embed=embed)
 
 
 @bot.event

@@ -5,7 +5,7 @@ from random import randint
 import discord
 from discord.ext.commands.help import HelpCommand
 
-navigation = {"◀️": -1, "▶️": 1}
+registered_emojis = {"◀️": -1, "▶️": 1}
 
 
 class Paginator:
@@ -46,7 +46,7 @@ class Paginator:
     def get_page_reaction(self, emoji: str):
         """Returns the current page based on an emoji"""
         pages = len(self._pages) - 1
-        self._current_page += navigation[emoji]
+        self._current_page += registered_emojis[emoji]
         if self._current_page < 0:
             self._current_page = pages
         if self._current_page > pages:
@@ -70,7 +70,8 @@ class Paginator:
         for page in self._pages:
             if page.title == page_name and (len(page) + len(line) + 1 < self.max_size):
                 return page
-        return self.add_page(page_name)
+        page = self.add_page(page_name)
+        return page
 
     def add_line(self, page_name, line="", *, empty=False):
         """Adds a line to the current page.
@@ -224,48 +225,71 @@ class PrettyHelp(HelpCommand):
         ctx = self.context
         bot = self.context.bot
 
-        for page in self.paginator.pages:
+        for i, page in enumerate(self.paginator.pages):
             page.description += "```"
+            if bot_help:
+                page.title = page.title + f" {i+1}/{len(self.paginator.pages)}"
 
         message: discord.Message = await destination.send(
             embed=self.paginator._pages[0]
         )
+
+        def stop_check(reaction: discord.Reaction, user):
+            if user != bot.user and message.id == reaction.message.id and reaction.emoji == '⏹':
+                return True
+
+        await message.add_reaction("⏹")
+        going = True
         if bot_help:
 
-            for emoji in navigation.keys():
+            for emoji in registered_emojis.keys():
                 await message.add_reaction(emoji)
 
-            while bot_help:
+            while going:
                 try:
 
                     def check(reaction: discord.Reaction, user):
-
                         if user != bot.user and message.id == reaction.message.id:
                             return True
 
-                    reaction, user = await bot.wait_for(
-                        "reaction_add", timeout=30, check=check
-                    )
+                    pending_tasks = [bot.wait_for('reaction_add', timeout=30, check=check),
+                                     bot.wait_for('reaction_remove', timeout=30, check=check)]
+                    done_tasks, pending_tasks = await asyncio.wait(pending_tasks, return_when=asyncio.FIRST_COMPLETED)
+
+                    reaction, user = await list(done_tasks)[0]
+                    if reaction.emoji == '⏹':
+                        going = False
+                        await message.delete()
+                        break
+
+                    #reaction, user = await bot.wait_for(
+                    #    "reaction_add", timeout=30, check=check
+                    #)
 
                     user_check = user == ctx.author
                     emoji_check = any(
-                        emoji == reaction.emoji for emoji in navigation.keys()
+                        emoji == reaction.emoji for emoji in registered_emojis.keys()
                     )
                     if emoji_check and user_check:
                         next_page = self.paginator.get_page_reaction(reaction.emoji)
-                        await message.edit(embed=self.paginator._pages[next_page])
+                        page = self.paginator._pages[next_page]
+                        await message.edit(embed=page)
 
-                    try:
-                        await message.remove_reaction(reaction.emoji, user)
-                    except discord.errors.Forbidden:
-                        pass
+                    #await message.remove_reaction(reaction.emoji, user)
+
                 except asyncio.TimeoutError:
-                    bot_help = False
-                    for emoji in navigation.keys():
-                        try:
-                            await message.remove_reaction(emoji, bot.user)
-                        except discord.errors.Forbidden:
-                            pass
+                    going = False
+                    await message.delete()
+                    #await message.edit(content='Deleted Help Message', embed=None)
+                    #for emoji in registered_emojis.keys():
+                    #    await message.remove_reaction(emoji, bot.user)
+        else:
+            try:
+                reaction, user = await bot.wait_for('reaction_add', timeout=30, check=stop_check)
+            except asyncio.TimeoutError:
+                pass
+            finally:
+                await message.delete()
 
     def add_command_formatting(self, command):
         """A utility function to format the non-indented block of commands and groups.
@@ -329,10 +353,10 @@ class PrettyHelp(HelpCommand):
             )
             self.add_indented_commands(commands, heading=category, max_size=max_size)
 
-        note = self.get_ending_note()
-        if note:
-            self.paginator.add_line(self._no_category)
-            self.paginator.add_line(self._no_category, note)
+            note = self.get_ending_note()
+            if note:
+                self.paginator.add_line(category)
+                self.paginator.add_line(category, note)
 
         await self.send_pages(bot_help=True)
 
