@@ -250,8 +250,6 @@ async def on_message(message):
             await bot.process_commands(message)
 
     if message.channel.id in dbh.database.db['guilds'][message.guild.id]['media_channels']:
-        await sleep(1)
-        message = await message.channel.fetch_message(message.id)
         await functions.handle_media_channel(message.guild, message.channel.id, message)
 
 
