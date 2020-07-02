@@ -260,7 +260,8 @@ async def on_message(message):
 
     if message.content != '' and is_valid:
         if bot.user.mention == message.content.split()[0].replace('!', '') and len(message.content.split()) == 1:
-            await message.channel.send("You can call `sb help` to get help with commands. You can also call `sb links` to get a link to the support server.")
+            prefix = dbh.database.db['guilds'][message.guild.id]['prefix']
+            await message.channel.send(f"The prefix for this server is `{prefix}`\nCall `{prefix}help` for help with commands or `{prefix}links` for helpful links.")
         else:
             await bot.process_commands(message)
 
