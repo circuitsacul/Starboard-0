@@ -2,6 +2,7 @@ import discord, db_handler as dbh, copy
 from asyncio import Lock
 from discord.ext import commands
 from typing import Union
+import functions
 
 
 class Settings(commands.Cog):
@@ -133,11 +134,13 @@ class Settings(commands.Cog):
                         if channel_object is None:
                             msg += f"Deleted Channel; ChannelID: {channel_id}\n"
                             continue
-                        msg += f"{channel_object.mention}: {settings[channel_id]['emojis']}\n"
+                        emoji_str = await functions.get_emoji_str(ctx.guild, settings[channel_id]['emojis'])
+                        msg += f"{channel_object.mention}: {emoji_str}\n"
             else:
                 settings = dbh.database.db['guilds'][ctx.guild.id]['channels']
                 channel_object = discord.utils.get(ctx.guild.channels, id=channel.id)
-                msg += f"{channel_object.mention}: {settings[channel.id]['emojis']}\n"
+                emoji_str = await functions.get_emoji_str(ctx.guild, settings[channel.id]['emojis'])
+                msg += f"{channel_object.mention}: {emoji_str}\n"
                 msg += f"**----requiredStars:** {settings[channel.id]['required_stars']}\n"
                 msg += f"**----requiredToLose:** {settings[channel.id]['required_to_lose']}\n"
                 msg += f"**----selfStar:** {settings[channel.id]['self_star']}\n"
@@ -240,13 +243,16 @@ class Settings(commands.Cog):
         brief='Add emoji'
         )
     @commands.has_permissions(manage_channels=True)
-    async def starboard_add_emoji(self, ctx, channel: discord.TextChannel, emoji):
+    async def starboard_add_emoji(self, ctx, channel: discord.TextChannel, in_emoji):
+        emoji = await functions.get_emoji(ctx.guild, in_emoji)
+        if type(emoji) is discord.Emoji:
+            emoji = emoji.id
         try:
             if ctx.guild.id not in dbh.database.locks:
                 dbh.database.locks[ctx.guild.id] = Lock()
             async with dbh.database.locks[ctx.guild.id]:
                 dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]['emojis'].append(emoji)
-            await ctx.send(f"Added {emoji} to {channel.mention}")
+            await ctx.send(f"Added {in_emoji} to {channel.mention}")
         except KeyError:
             await ctx.send(f"{channel.mention} is not a starboard.")
 
@@ -256,7 +262,10 @@ class Settings(commands.Cog):
         brief='Remove emoji'
         )
     @commands.has_permissions(manage_channels=True)
-    async def starboard_remove_emoji(self, ctx, channel: discord.TextChannel, emoji):
+    async def starboard_remove_emoji(self, ctx, channel: discord.TextChannel, in_emoji):
+        emoji = await functions.get_emoji(ctx.guild, in_emoji)
+        if type(emoji) is discord.Emoji:
+            emoji = emoji.id
         try:
             if ctx.guild.id not in dbh.database.locks:
                 dbh.database.locks[ctx.guild.id] = Lock()
@@ -266,29 +275,18 @@ class Settings(commands.Cog):
                     dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]['emojis'].remove(emoji)
                     found = True
                 else:
-                    print(emoji)
-                    for x, emoji2 in enumerate(dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]['emojis']):
-                        print(emoji2)
-                        split_emoji2 = emoji2.split(':')
-                        print(split_emoji2)
-                        if len(split_emoji2) > 1:
-                            print(emoji.replace(':', ''), split_emoji2[1])
-                            if emoji.replace(':', '') == split_emoji2[1]:
-                                dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]['emojis'].pop(x)
-                                found = True
-                                break
-                            split_emoji = emoji.split(':')
-                            if len(split_emoji) > 2:
-                                if split_emoji[2] == split_emoji2[2]:
-                                    dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]['emojis'].pop(x)
-                                    found = True
-                                    break
+                    try:
+                        if int(emoji) in dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]['emojis']:
+                            dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]['emojis'].remove(int(emoji))
+                            found = True
+                    except Exception as e:
+                        print(e)
             if found:
-                await ctx.send(f"Removed {emoji} from {channel.mention}")
+                await ctx.send(f"Removed {in_emoji} from {channel.mention}")
             else:
                 await ctx.send(f"Could not find that emoji in {channel.mention}")
         except KeyError:
-            await ctx.send(f"Either {emoji} is not linked to {channel.mention} or {channel.mention} is not a starboard.")
+            await ctx.send(f"Either {in_emoji} is not linked to {channel.mention} or {channel.mention} is not a starboard.")
 
 
     @channel.command(
@@ -345,13 +343,15 @@ class Settings(commands.Cog):
                         del dbh.database.db['guilds'][ctx.guild.id]['media_channels'][media_channel_id]
                         continue
                     emojis = dbh.database.db['guilds'][ctx.guild.id]['media_channels'][media_channel_id]['emojis']
-                    string += f"{media_channel.mention}: {emojis}\n"
+                    emoji_str = await functions.get_emoji_str(ctx.guild, emojis)
+                    string += f"{media_channel.mention}: {emoji_str}\n"
                 if string == '':
                     string = "You have no media channels set. Use `sb mediachannel add <channel>` to add one."
         else:
             settings = dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]
             emojis = settings['emojis']
-            string = f"{channel.mention}: {emojis}\n**----mediaOnly:** {settings['media_only']}"
+            emoji_str = await functions.get_emoji_str(ctx.guild, emojis)
+            string = f"{channel.mention}: {emoji_str}\n**----mediaOnly:** {settings['media_only']}"
         embed = discord.Embed(title='Media Channels', description=string, color=0xFCFF00)
         await ctx.send(embed=embed)
 
@@ -399,7 +399,10 @@ class Settings(commands.Cog):
         description='Adds an emoji for the bot to automatically react to all messages sent in the media channel'
     )
     @commands.has_permissions(manage_channels=True)
-    async def media_channel_add_emoji(self, ctx, channel: discord.TextChannel, emoji):
+    async def media_channel_add_emoji(self, ctx, channel: discord.TextChannel, in_emoji):
+        emoji = await functions.get_emoji(ctx.guild, in_emoji)
+        if type(emoji) is discord.Emoji:
+            emoji = emoji.id
         if channel is None:
             await ctx.send("I could not find a channel with that name or id")
             return
@@ -410,14 +413,17 @@ class Settings(commands.Cog):
                 await ctx.send("That is not a media channel")
                 return
             dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis'].append(emoji)
-            await ctx.send(f"Added {emoji} to {channel.mention}")
+            await ctx.send(f"Added {in_emoji} to {channel.mention}")
 
     @media_channels.command(
         name='removeemoji', aliases=['re'], brief='Remove an emoji from media channel',
         description='Remove an emoji from media channel'
     )
     @commands.has_permissions(manage_channels=True)
-    async def media_channel_remove_emoji(self, ctx, channel: discord.TextChannel, emoji):
+    async def media_channel_remove_emoji(self, ctx, channel: discord.TextChannel, in_emoji):
+        emoji = await functions.get_emoji(ctx.guild, in_emoji)
+        if type(emoji) is discord.Emoji:
+            emoji = emoji.id
         if channel is None:
             await ctx.send("I could not find a channel with that name or id")
             return
@@ -432,22 +438,14 @@ class Settings(commands.Cog):
                 dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis'].remove(emoji)
                 found = True
             else:
-                for x, emoji2 in enumerate(dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis']):
-                    split_emoji2 = emoji2.split(':')
-                    if len(split_emoji2) > 2:
-                        if emoji.replace(':', '') == split_emoji2[1]:
-                            dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis'].pop(x)
-                            found = True
-                            break
-                        else:
-                            split_emoji = emoji.split(':')
-                            if len(split_emoji) > 2:
-                                if split_emoji[2] == split_emoji2[2]:
-                                    dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis'].pop(x)
-                                    found = True
-                                    break
+                try:
+                    if int(emoji) in dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis']:
+                        dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis'].remove(int(emoji))
+                        found = True
+                except Exception as e:
+                    print(e)
             if found:
-                await ctx.send(f"Removed {emoji} from {channel.mention}")
+                await ctx.send(f"Removed {in_emoji} from {channel.mention}")
             else:
                 await ctx.send(f"Could not find that emoji in {channel.mention}")
 

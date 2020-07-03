@@ -19,6 +19,7 @@ server_db = {
             },
         'messages': {},
         'channels': {},
+        'media_channels': {},
         'leaderboard': {},
         'prefix': 'sb '
         }
@@ -45,9 +46,9 @@ class DataBase():
             self.db = pickle.load(f)
         # checks
         for guild in guilds:
+            self.add_guild(guild.id)
             if 'prefix' not in self.db['guilds'][guild.id]:
                 self.db['guilds'][guild.id]['prefix'] = server_db['prefix']
-            self.add_guild(guild.id)
 
     def save_database(self):
         with open(self.path, 'wb') as f:
