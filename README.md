@@ -30,31 +30,31 @@ Here is an example command: Say you wanted to make the bot repeat the word "hell
 This bot is easy to set up and get going. The following directions are very specific and mostly so you can see how it works, but also gives you an idea of how to configure it for your needs. If you need further help, you can join the [support server](https://discord.gg/3gK8mSA).
  1. [Invite](https://discord.com/api/oauth2/authorize?client_id=700796664276844612&permissions=117824&scope=bot) the bot to your server.
  2. Create a channel called `#starboard` by typing (or whatever you want to name it)
- 3. Type `sb channel add <channel>` to add the starboard.
- 4. Type `sb channel requiredstars <starboard> 1` (Setting the number of stars for a message to get on the starboard to 1, so you can test it easily.
- 5. Type `sb channel selfstar <starboard> true` (This allows you to star your own messages, otherwise it would be hard to test the bot)
- 6. Now, we need to add an emoji. In this case, we are going to use the `star` emoji. Type `sb channel emoji add <starboard> :star:`
+ 3. Type `sb starboard add <channel>` to add the starboard.
+ 4. Type `sb starboard requiredstars <starboard> 1` (Setting the number of stars for a message to get on the starboard to 1, so you can test it easily.
+ 5. Type `sb starboard selfstar <starboard> true` (This allows you to star your own messages, otherwise it would be hard to test the bot)
+ 6. Now, we need to add an emoji. In this case, we are going to use the `star` emoji. Type `sb starboard addemoji <starboard> :star:`
  7. Now send a message in the channel, and react with the `star` emoji. It should appear on the starboard!
 
 ## Other Settings You Can Change:
  - requiredStars: How many points it needs before it appears on your starboard. 
-   - Specific Starboard: `sb channel requiredstars <starboard> <number_of_stars>`
+   - Specific Starboard: `sb starboard requiredstars <starboard> <number_of_stars>`
    - Default Setting: `sb defaults requiredstars <number_of_stars>`
  - requiredToLose: How *few* stars a message needs to have before it gets *removed* from a starboard.
-   - Specific Starboard: `sb channel requiredtolose <starboard> <number_of_stars>`
+   - Specific Starboard: `sb starboard requiredtolose <starboard> <number_of_stars>`
    - Default Setting: `sb defaults requiredtolose <number_of_stars>`
 - selfStar: Wether or not a user can star their own messages.	
-   - Specific Starboard: `sb channel selfstar <starboard> <true|false>`	
+   - Specific Starboard: `sb starboard selfstar <starboard> <true|false>`	
    - Default Setting: `sb defaults selfstar <true|false>`	
  - linkEdits: Wether or not the starboard message should update if the original message get's edited.	
-   - Specific Starboard: `sb channel linkedits <starboard> <true|false>`	
+   - Specific Starboard: `sb starboard linkedits <starboard> <true|false>`	
    - Default Setting: `sb defaults linkedits <true|false>`	
  - linkDeletes: Whether or not the starboard message should be deleted if the original message is deleted.	
-   - Specific Starboard: `sb channel linkdeltes <starboard> <true|false>`	
+   - Specific Starboard: `sb starboard linkdeltes <starboard> <true|false>`	
    - Default Setting: `sb defaults linkdeletes <true|false>`	
  - Emojis: (Default is no emoji, and cannot be changed)	
-   - Add: `sb channel emoji add <starboard> <emoji>`	
-   - Remove: `sb channel emoji remove <starboard> <emoji>`	
+   - Add: `sb starboard addemoji <starboard> <emoji>`	
+   - Remove: `sb starboard removeemoji <starboard> <emoji>`	
 
 ## Complete Command List:	
  - No Category:	
@@ -64,17 +64,16 @@ This bot is easy to set up and get going. The following directions are very spec
    - ping: Get bot latency `ping`
    - suggest: Send suggestion to me	`suggest <suggestion>`
  - Settings:	
-   - channel: List starboards	`channel`
-     - add: Add a starboard	`channel add <channel>`
-     - remove: Remove a starboard	`channel remove <starboard>`
-     - emoji: Manage emojis
-       - add: Add emoji to starboard	`channel emoji add <starboard> <emoji>`
-       - remove: Remove emoji from starboard	`channel emoji remove <starboard> <emoji>`
-     - linkdeletes: Set link-deletes for starboard	`channel linkdeletes <starboard> <true|false>`
-     - linkedits: Set link-edits for starboard	`channel linkedits <starboard> <true|false>`
-     - requiredstars: Set required-stars for starboard	`channel requiredstars <starboard> <required_stars>`
-     - requiredtolose: Set required-to-lose for starboard	`channel requiredtolose <starboard> <required_to_lose>`
-     - selfstar: Set self-star for starboard	`channel selfstar <starboard> <true|false>`
+   - starboard: List starboards	`starboard`
+     - add: Add a starboard	`starboard add <channel>`
+     - remove: Remove a starboard	`starboard remove <starboard>`
+     - addemoji: Add emoji to starboard	`starboard addemoji <starboard> <emoji>`
+     - removeemoji: Remove emoji from starboard	`starboard removeemoji <starboard> <emoji>`
+     - linkdeletes: Set link-deletes for starboard	`starboard linkdeletes <starboard> <true|false>`
+     - linkedits: Set link-edits for starboard	`starboard linkedits <starboard> <true|false>`
+     - requiredstars: Set required-stars for starboard	`starboard requiredstars <starboard> <required_stars>`
+     - requiredtolose: Set required-to-lose for starboard	`starboard requiredtolose <starboard> <required_to_lose>`
+     - selfstar: Set self-star for starboard	`starboard selfstar <starboard> <true|false>`
    - defaults: View default settings for starboards	`defaults`
      - linkdeletes: Set default for linkEdits	`defaults linkdeletes <true|false>`
      - linkedits: Set default for linkDeletes	`defaults linkedits <true|false>`
@@ -87,5 +86,6 @@ This bot is easy to set up and get going. The following directions are very spec
      - mediaonly: Wether or not to delete messages that don't include attachments `mediachannel mediaonly <channel> <true|false>`
      - addemoji: Adds an emoji for the bot to automatically to react to all messages in channel with `mediachannel addemoji <channel> <emoji>`
      - removeemoji: Removes an emoji from media channel `mediachannel removeemoji <channel> <emoji>`
+   - prefix: Change bot prefix `prefix <prefix> [has_space=False]`
  - Utility	
    - recount: Recounts the emojis on a message `recount <channel> <message_id>`
