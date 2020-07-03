@@ -67,7 +67,8 @@ async def ping(ctx):
     )
 async def links(ctx):
     embed = discord.Embed(title='Helpful Links', colour=0xFCFF00)
-    embed.add_field(name='Invites:', value=f"[**Invite me to your server**]({INVITE})\n[**Join support server**]({SUPPORT_SERVER})")
+    embed.description = f"[**Invite me to your server**]({INVITE})\n[**Join support server**]({SUPPORT_SERVER})\
+        \n[**Documentation**](https://circuitsacul.github.io/StarBot/)"
     await ctx.send(ctx.message.author.mention, embed=embed)
 
 @bot.command(name='info', aliases=['botstats'], description='Bot stats', brief='Bot stats')
@@ -97,6 +98,8 @@ async def on_command_error(ctx, error):
     elif type(error) is discord.ext.commands.errors.CommandNotFound:
         return
     elif type(error) is discord.ext.commands.errors.BadArgument:
+        pass
+    elif type(error) is discord.ext.commands.errors.MissingRequiredArgument:
         pass
     else:
         embed = discord.Embed(title='Error!', description='An unexpected error ocurred. Please report this to the dev.', color=discord.Color.red())

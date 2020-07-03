@@ -69,7 +69,11 @@ async def award_on_starboard(guild_id, user_id, points, bot):
 async def recount_stars(guild, channel, message_id, bot):
     if (channel.id, message_id) not in dbh.database.db['guilds'][guild.id]['messages']:
         dbh.database.db['guilds'][guild.id]['messages'][(channel.id, message_id)] = {'emojis': {}, 'links': {}}
-    message = await channel.fetch_message(message_id)
+    try:
+        message = await channel.fetch_message(message_id)
+    except Exception as e:
+        print(e)
+        return True
     if message is not None:
         for emoji in message.reactions:
             if emoji.emoji not in dbh.database.db['guilds'][guild.id]['messages'][(channel.id, message_id)]['emojis']:
@@ -91,8 +95,9 @@ async def recount_stars(guild, channel, message_id, bot):
                 dbh.database.db['guilds'][guild.id]['messages'][(channel.id, message_id)]['emojis'][emoji.emoji] = {}
             async for user in emoji.users():
                 dbh.database.db['guilds'][guild.id]['messages'][(channel.id, message_id)]['emojis'][emoji.emoji][user.id] = True
-
     await update_message(guild.id, channel.id, message_id, bot)
+
+    return False
 
 
 async def get_embed_from_message(message):
@@ -159,11 +164,13 @@ async def new_link_message(original_message, starboard_channel, points, emojis):
     sent = await starboard_channel.send(f"**{points} points | {original_channel.mention}**", embed=embed)
     dbh.database.db['guilds'][guild.id]['messages'][(original_channel.id, original_message.id)]['links'][starboard_channel.id] = sent.id
     dbh.database.db['guilds'][guild.id]['channels'][starboard_channel.id]['messages'][sent.id] = (original_channel.id, original_message.id)
-    for emoji in emojis:
+    cp_emojis = emojis
+    for emoji in cp_emojis:
         try:
             await sent.add_reaction(emoji)
         except Exception as e:
             print(e)
+            emojis.remove(emoji)
 
 
 async def update_link_message(original_message, link_message, points, emojis):
