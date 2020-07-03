@@ -5,6 +5,32 @@ import asyncio
 from asyncio import Lock, sleep
 
 
+async def get_emoji(guild, emoji):
+    try:
+        if type(emoji) is str:
+            split_emoji = emoji.split(':')
+            if len(split_emoji) > 2:
+                emoji_id = int(split_emoji[2].replace('>', ''))
+            else:
+                emoji_id = int(split_emoji[0])
+        else:
+            emoji_id = emoji
+        emoji_obj = utils.get(guild.emojis, id=emoji_id)
+        if emoji_obj is not None:
+            return emoji_obj
+    except:
+        pass
+    return emoji
+
+
+async def get_emoji_str(guild, emojis):
+    emoji_string = ''
+    for emoji in emojis:
+        obj = await get_emoji(guild, emoji)
+        emoji_string += f"{obj} "
+    return emoji_string
+
+
 async def get_prefix(bot, message):
     prefix = dbh.database.db['guilds'][message.guild.id]['prefix']
     return discord.ext.commands.when_mentioned_or(prefix)(bot, message)
@@ -164,21 +190,23 @@ async def new_link_message(original_message, starboard_channel, points, emojis):
     sent = await starboard_channel.send(f"**{points} points | {original_channel.mention}**", embed=embed)
     dbh.database.db['guilds'][guild.id]['messages'][(original_channel.id, original_message.id)]['links'][starboard_channel.id] = sent.id
     dbh.database.db['guilds'][guild.id]['channels'][starboard_channel.id]['messages'][sent.id] = (original_channel.id, original_message.id)
-    for emoji in emojis:
+    for emoji_str in emojis:
+        emoji = await get_emoji(guild, emoji_str)
         try:
             await sent.add_reaction(emoji)
         except Exception as e:
             print(e)
 
 
-async def update_link_message(original_message, link_message, points, emojis):
+async def update_link_message(guild, original_message, link_message, points, emojis):
     if original_message is not None:
         original_channel = original_message.channel
         embed = await get_embed_from_message(original_message)
         await link_message.edit(content=f"**{points} points | {original_channel.mention}**", embed=embed)
     else:
         await link_message.edit(content=f"**{points} points | deleted**")
-    for emoji in emojis:
+    for emoji_str in emojis:
+        emoji = await get_emoji(guild, emoji_str)
         try:
             await link_message.add_reaction(emoji)
         except Exception as e:
@@ -244,7 +272,7 @@ async def handle_starboard(guild, channel_id, starboard_id, deleted, message_id,
         if remove:
             await link_message.delete()
         else:
-            await update_link_message(message, link_message, points, starboard_settings['emojis'])
+            await update_link_message(guild, message, link_message, points, starboard_settings['emojis'])
     elif add:
         await new_link_message(message, starboard, points, starboard_settings['emojis'])
 
@@ -267,7 +295,8 @@ async def handle_media_channel(guild, channel_id, message):
             await message.author.send(string)
             return
 
-    for emoji in settings['emojis']:
+    for emoji_str in settings['emojis']:
+        emoji = await get_emoji(guild, emoji_str)
         try:
             await message.add_reaction(emoji)
         except Exception as e:

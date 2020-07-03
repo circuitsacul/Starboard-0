@@ -34,6 +34,12 @@ async def loop_save():
         dbh.database.save_database()
 
 
+@bot.command()
+async def test(ctx, emoji):
+    emoji = await functions.get_emoji(ctx.guild, emoji)
+    await ctx.send(f"{type(emoji)}, {emoji}")
+
+
 @commands.cooldown(2, 120, commands.BucketType.user)
 @bot.command(
     name='suggest', aliases=['suggestion'],
@@ -148,7 +154,7 @@ async def on_raw_reaction_add(payload):
         return
 
     if payload.emoji.id is not None:
-        emoji_str = f"<:{payload.emoji.name}:{payload.emoji.id}>"
+        emoji_str = payload.emoji.id
     else:
         emoji_str = payload.emoji.name
 
@@ -189,7 +195,7 @@ async def on_raw_reaction_remove(payload):
         return
 
     if payload.emoji.id is not None:
-        emoji_str = f"<:{payload.emoji.name}:{payload.emoji.id}>"
+        emoji_str = payload.emoji.id
     else:
         emoji_str = payload.emoji.name
 
