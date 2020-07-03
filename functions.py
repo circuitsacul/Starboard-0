@@ -164,13 +164,11 @@ async def new_link_message(original_message, starboard_channel, points, emojis):
     sent = await starboard_channel.send(f"**{points} points | {original_channel.mention}**", embed=embed)
     dbh.database.db['guilds'][guild.id]['messages'][(original_channel.id, original_message.id)]['links'][starboard_channel.id] = sent.id
     dbh.database.db['guilds'][guild.id]['channels'][starboard_channel.id]['messages'][sent.id] = (original_channel.id, original_message.id)
-    cp_emojis = emojis
-    for emoji in cp_emojis:
+    for emoji in emojis:
         try:
             await sent.add_reaction(emoji)
         except Exception as e:
             print(e)
-            emojis.remove(emoji)
 
 
 async def update_link_message(original_message, link_message, points, emojis):
