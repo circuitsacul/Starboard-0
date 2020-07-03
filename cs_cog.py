@@ -269,14 +269,20 @@ class Settings(commands.Cog):
                     print(emoji)
                     for x, emoji2 in enumerate(dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]['emojis']):
                         print(emoji2)
-                        split_emoji = emoji2.split(':')
-                        print(split_emoji)
-                        if len(split_emoji) > 1:
-                            print(emoji.replace(':', ''), split_emoji[1])
-                            if emoji.replace(':', '') == split_emoji[1]:
+                        split_emoji2 = emoji2.split(':')
+                        print(split_emoji2)
+                        if len(split_emoji2) > 1:
+                            print(emoji.replace(':', ''), split_emoji2[1])
+                            if emoji.replace(':', '') == split_emoji2[1]:
                                 dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]['emojis'].pop(x)
                                 found = True
                                 break
+                            split_emoji = emoji.split(':')
+                            if len(split_emoji) > 2:
+                                if split_emoji[2] == split_emoji2[2]:
+                                    dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]['emojis'].pop(x)
+                                    found = True
+                                    break
             if found:
                 await ctx.send(f"Removed {emoji} from {channel.mention}")
             else:
@@ -427,12 +433,19 @@ class Settings(commands.Cog):
                 found = True
             else:
                 for x, emoji2 in enumerate(dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis']):
-                    split_emoji = emoji2.split(':')
-                    if len(split_emoji) > 1:
-                        if emoji.replace(':', '') == split_emoji[1]:
+                    split_emoji2 = emoji2.split(':')
+                    if len(split_emoji2) > 2:
+                        if emoji.replace(':', '') == split_emoji2[1]:
                             dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis'].pop(x)
                             found = True
                             break
+                        else:
+                            split_emoji = emoji.split(':')
+                            if len(split_emoji) > 2:
+                                if split_emoji[2] == split_emoji2[2]:
+                                    dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]['emojis'].pop(x)
+                                    found = True
+                                    break
             if found:
                 await ctx.send(f"Removed {emoji} from {channel.mention}")
             else:
