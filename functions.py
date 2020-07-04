@@ -160,7 +160,7 @@ async def get_embed_from_message(message):
     value_string = f"{message.content}\n{embed_text}"
     context_string = f"\n[**Jump to Message**]({message.jump_url})"
     if len(value_string + context_string) >= 1000:
-        full_string = value_string[0:800] + "...\n*message clipped*\n" + context_string
+        full_string = value_string[0:800] + "... *message clipped*\n" + context_string
     else:
         full_string = value_string + context_string
     embed.add_field(name=f'Message{" (NSFW)" if nsfw else ""}', value=full_string)
