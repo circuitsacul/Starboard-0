@@ -200,13 +200,16 @@ async def new_link_message(original_message, starboard_channel, points, emojis):
             print(e)
 
 
-async def update_link_message(guild, original_message, link_message, points, emojis):
-    if original_message is not None:
+async def update_link_message(guild, original_message, link_message, points, emojis, link_edits):
+    if original_message is not None and link_edits:
         original_channel = original_message.channel
         embed = await get_embed_from_message(original_message)
         await link_message.edit(content=f"**{points} points | {original_channel.mention}**", embed=embed)
-    else:
+    elif original_message is None:
         await link_message.edit(content=f"**{points} points | deleted**")
+    else:
+        original_channel = original_message.channel
+        await link_message.edit(content=f"**{points} points | {original_channel.mention}**")
     for emoji_str in emojis:
         emoji = await get_emoji(guild, emoji_str)
         try:
@@ -274,7 +277,11 @@ async def handle_starboard(guild, channel_id, starboard_id, deleted, message_id,
         if remove:
             await link_message.delete()
         else:
-            await update_link_message(guild, message, link_message, points, starboard_settings['emojis'])
+            link_edits = starboard_settings['link_edits']
+            try:
+                await update_link_message(guild, message, link_message, points, starboard_settings['emojis'], link_edits)
+            except discord.errors.NotFound:
+                pass
     elif add:
         await new_link_message(message, starboard, points, starboard_settings['emojis'])
 
