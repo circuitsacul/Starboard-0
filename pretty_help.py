@@ -281,8 +281,8 @@ class PrettyHelp(HelpCommand):
                     for emoji in navigation.keys():
                         try:
                             await message.remove_reaction(emoji, bot.user)
-                        except discord.errors.Forbidden:
-                            pass
+                        except Exception:
+                            break
 
     def add_command_formatting(self, command):
         """A utility function to format the non-indented block of commands and groups.
