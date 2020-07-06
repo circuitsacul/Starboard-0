@@ -34,6 +34,24 @@ async def loop_save():
         dbh.database.save_database()
 
 
+@bot.command(
+    name='about', brief='About Starboards',
+    description='Give quick description of what a starboard is and what it is for'
+)
+async def about_starbot(ctx):
+    msg = """
+    StarBot is a Discord starboard bot.\
+    Starboards are kind of like democratic pins.\
+    A user can "vote" to have a message displayed on a channel by reacting with an emoji, usually a star.\
+    A Starboard is a great way to archive funny messages.\
+    """
+    embed=discord.Embed(
+        title='About StarBot and Starboards',
+        description=msg, color=0xFCFF00
+    )
+    await ctx.send(embed=embed)
+
+
 @commands.cooldown(2, 120, commands.BucketType.user)
 @bot.command(
     name='suggest', aliases=['suggestion'],

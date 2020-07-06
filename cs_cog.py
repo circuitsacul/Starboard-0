@@ -147,7 +147,7 @@ class Settings(commands.Cog):
                 msg += f"**----linkEdits:** {settings[channel.id]['link_edits']}\n"
                 msg += f"**----linkDeletes:** {settings[channel.id]['link_deletes']}\n"
             if msg == '':
-                msg = 'No starboards have been set. Use `sb.channel add #channel_name` to add one.'
+                msg = 'No starboards have been set. Use `<prefix> starboard add <channel>` to add one.'
             embed = discord.Embed(title='Starboards', description=msg, color=0xFCFF00)
             await ctx.send(embed=embed)
 
@@ -346,7 +346,7 @@ class Settings(commands.Cog):
                     emoji_str = await functions.get_emoji_str(ctx.guild, emojis)
                     string += f"{media_channel.mention}: {emoji_str}\n"
                 if string == '':
-                    string = "You have no media channels set. Use `sb mediachannel add <channel>` to add one."
+                    string = "You have no media channels set. Use `<prefix> mediachannel add <channel>` to add one."
         else:
             settings = dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]
             emojis = settings['emojis']
