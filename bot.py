@@ -8,6 +8,7 @@ from owner_cog import Owner
 from util_cog import Utility
 from pretty_help import PrettyHelp
 import functions
+import converters
 from secrets import TOKEN, BETA_TOKEN, OWNER_ID, INVITE, SUPPORT_SERVER, SUPPORT_ID, SUGGESTION_CHANNEL
 
 PREFIXES = functions.get_prefix
@@ -32,6 +33,11 @@ async def loop_save():
     while running:
         await sleep(60)
         dbh.database.save_database()
+
+
+@bot.command()
+async def test(ctx, channel: converters.ChannelElseInt):
+    await ctx.send(channel)
 
 
 @bot.command(

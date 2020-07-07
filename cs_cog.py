@@ -3,6 +3,7 @@ from asyncio import Lock
 from discord.ext import commands
 from typing import Union
 import functions
+from converters import ChannelElseInt
 
 
 class Settings(commands.Cog):
@@ -132,7 +133,7 @@ class Settings(commands.Cog):
                     for channel_id in dbh.database.db['guilds'][ctx.guild.id]['channels']:
                         channel_object = discord.utils.get(ctx.guild.channels, id=channel_id)
                         if channel_object is None:
-                            msg += f"Deleted Channel; ChannelID: {channel_id}\n"
+                            msg += f"Deleted Channel; ID: {channel_id}\n"
                             continue
                         emoji_str = await functions.get_emoji_str(ctx.guild, settings[channel_id]['emojis'])
                         msg += f"{channel_object.mention}: {emoji_str}\n"
@@ -223,17 +224,18 @@ class Settings(commands.Cog):
         brief='Remove starboard'
         )
     @commands.has_permissions(manage_channels=True)
-    async def remove_channel(self, ctx, channel: discord.TextChannel):
+    async def remove_channel(self, ctx, channel: ChannelElseInt):
         if channel == None:
             await ctx.send("I could not find any channel with that name or id")
             return
 
         try:
+            channel_id = channel if isinstance(channel, int) else channel.id
             if ctx.guild.id not in dbh.database.locks:
                 dbh.database.locks[ctx.guild.id] = Lock()
             async with dbh.database.locks[ctx.guild.id]:
-                del dbh.database.db['guilds'][ctx.guild.id]['channels'][channel.id]
-            await ctx.send(f"{channel.mention} is no longer a starboard")
+                del dbh.database.db['guilds'][ctx.guild.id]['channels'][channel_id]
+            await ctx.send(f"{channel_id if isinstance(channel, int) else channel.mention} is no longer a starboard")
         except KeyError:
             await ctx.send("That channel is not a starboard")
 
@@ -339,12 +341,12 @@ class Settings(commands.Cog):
             async with dbh.database.locks[ctx.guild.id]:
                 for media_channel_id in dbh.database.db['guilds'][ctx.guild.id]['media_channels']:
                     media_channel = discord.utils.get(ctx.guild.channels, id=media_channel_id)
-                    if media_channel is None:
-                        del dbh.database.db['guilds'][ctx.guild.id]['media_channels'][media_channel_id]
-                        continue
-                    emojis = dbh.database.db['guilds'][ctx.guild.id]['media_channels'][media_channel_id]['emojis']
-                    emoji_str = await functions.get_emoji_str(ctx.guild, emojis)
-                    string += f"{media_channel.mention}: {emoji_str}\n"
+                    if media_channel is not None:
+                        emojis = dbh.database.db['guilds'][ctx.guild.id]['media_channels'][media_channel_id]['emojis']
+                        emoji_str = await functions.get_emoji_str(ctx.guild, emojis)
+                        string += f"{media_channel.mention}: {emoji_str}\n"
+                    else:
+                        string += f"Deleted Channel; ID: {media_channel_id}"
                 if string == '':
                     string = "You have no media channels set. Use `<prefix> mediachannel add <channel>` to add one."
         else:
@@ -379,20 +381,20 @@ class Settings(commands.Cog):
         name='remove', aliases=['r', '-'], brief='Remove media channel', description='Remove media channel'
     )
     @commands.has_permissions(manage_channels=True)
-    async def remove_media_channel(self, ctx, channel: discord.TextChannel):
+    async def remove_media_channel(self, ctx, channel: ChannelElseInt):
         if channel is None:
             await ctx.send("I could not find a channel with that name or id")
             return
-        #if isinstance(channel, int):
-        #    channel = discord.utils.get(ctx.guild.channels, id=channel)
+
+        channel_id = channel if isinstance(channel, int) else channel.id
         if ctx.guild.id not in dbh.database.locks:
             dbh.database.locks[ctx.guild.id] = Lock()
         async with dbh.database.locks[ctx.guild.id]:
-            if channel.id not in dbh.database.db['guilds'][ctx.guild.id]['media_channels']:
+            if channel_id not in dbh.database.db['guilds'][ctx.guild.id]['media_channels']:
                 await ctx.send("That does not appear to be a media channel")
                 return
-            del dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel.id]
-            await ctx.send(f"{channel.mention} is no longer a media channel")
+            del dbh.database.db['guilds'][ctx.guild.id]['media_channels'][channel_id]
+            await ctx.send(f"{channel if isinstance(channel, int) else channel.mention} is no longer a media channel")
 
     @media_channels.command(
         name='addemoji', aliases=['ae'], brief='Add an emoji to media channel',
