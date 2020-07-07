@@ -168,13 +168,17 @@ async def get_embed_from_message(message):
     if len(urls) > 0:
         url_string = ''
         current = 0
+        print(urls)
         for item in urls:
+            print(item)
             url_string += f"[**{item[0]}**]({item[1]})\n"
             if item[1].endswith('png') or item[1].endswith('jpg') or item[1].endswith('jpeg'):
                 if current == 0:
+                    print(0)
                     embed.set_image(url=item[1])
                     current += 1
                 elif current == 1:
+                    print(1)
                     embed.set_thumbnail(url=item[1])
         embed.add_field(name='Attachments', value=url_string, inline=False)
 
