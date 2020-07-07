@@ -55,7 +55,6 @@ class DataBase():
             try:
                 string = pickle.dumps(self.db)
                 f.write(string)
-                print("Saved Database")
             except Exception as e:
                 print(type(e), e)
                 print(self.db)

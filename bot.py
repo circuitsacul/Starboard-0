@@ -111,7 +111,6 @@ async def stats_for_bot(ctx):
 @bot.event
 async def on_command_error(ctx, error):
     if ctx.author.bot:
-        print(f"Error (invoked by bot): {error}")
         return
     elif type(error) is discord.ext.commands.errors.CommandNotFound:
         return
@@ -143,13 +142,12 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
-    print("Joined a guild!")
     dbh.database.add_guild(guild.id)
 
 
 @bot.event
 async def on_guild_remove(guild):
-    print("Left a guild...")
+    pass
 
 
 @bot.event
