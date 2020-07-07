@@ -35,11 +35,6 @@ async def loop_save():
         dbh.database.save_database()
 
 
-@bot.command()
-async def test(ctx, channel: converters.ChannelElseInt):
-    await ctx.send(channel)
-
-
 @bot.command(
     name='about', brief='About Starboards',
     description='Give quick description of what a starboard is and what it is for'
