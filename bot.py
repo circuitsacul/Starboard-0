@@ -119,10 +119,12 @@ async def on_command_error(ctx, error):
         pass
     elif type(error) is discord.ext.commands.errors.MissingRequiredArgument:
         pass
-    elif str(error).startswith('Command raised an exception: Forbidden'):
-        error = "I don't have the necessary permissions to do that :("
+    elif type(error) is discord.ext.commands.errors.NoPrivateMessage:
+        pass
     elif type(error) is discord.ext.commands.errors.MissingPermissions:
         pass
+    elif str(error).startswith('Command raised an exception: Forbidden'):
+        error = "I don't have the necessary permissions to do that :("
     else:
         embed = discord.Embed(title='Error!', description='An unexpected error ocurred. Please report this to the dev.', color=discord.Color.red())
         embed.add_field(name='Error Message:', value=f"```{type(error)}:\n{error}```")

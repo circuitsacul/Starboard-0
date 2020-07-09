@@ -15,8 +15,8 @@ class Settings(commands.Cog):
         name='prefix', aliases=['p'], brief='Set prefix',
         description='Set prefix for server'
     )
-    @commands.guild_only()
     @commands.has_permissions(manage_messages=True)
+    @commands.guild_only()
     async def set_prefix(self, ctx, prefix, space: bool = False):
         if prefix == '':
             await ctx.send("That cannot be the prefix")
@@ -53,6 +53,7 @@ class Settings(commands.Cog):
         brief='Set default for self-star'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def toggle_self_star(self, ctx, self_star: bool):
         if ctx.guild.id not in dbh.database.locks:
             dbh.database.locks[ctx.guild.id] = Lock()
@@ -66,6 +67,7 @@ class Settings(commands.Cog):
         brief='Set default for required-stars'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def required_stars(self, ctx, count: int):
         if count <= dbh.database.db['guilds'][ctx.message.guild.id]['default_settings']['required_to_lose']:
             await ctx.send("requiredStars cannot be less than or equal to requiredToLose")
@@ -82,6 +84,7 @@ class Settings(commands.Cog):
         brief='Set default for required-to-lose'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def required_to_lose(self, ctx, count: int):
         if count >= dbh.database.db['guilds'][ctx.message.guild.id]['default_settings']['required_stars']:
             await ctx.send("requiredToLose cannot be greater than or equal to requiredStars.")
@@ -97,6 +100,7 @@ class Settings(commands.Cog):
         brief='Set default for link-deletes'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def toggle_link_edits(self, ctx, link_edits: bool):
         if ctx.guild.id not in dbh.database.locks:
             dbh.database.locks[ctx.guild.id] = Lock()
@@ -109,6 +113,7 @@ class Settings(commands.Cog):
         brief='Set default for link-edits'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def toggle_link_deletes(self, ctx, link_deletes: bool):
         if ctx.guild.id not in dbh.database.locks:
             dbh.database.locks[ctx.guild.id] = Lock()
@@ -158,6 +163,7 @@ class Settings(commands.Cog):
         brief='Set self-star for starboard'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def channel_self_star(self, ctx, channel: discord.TextChannel, allow: bool):
         if channel == None:
             await ctx.send("I could not find any channel with that name or id")
@@ -174,6 +180,7 @@ class Settings(commands.Cog):
         brief='Set link-edits for starboard'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def channel_link_edits(self, ctx, channel: discord.TextChannel, link_edits: bool):
         if ctx.guild.id not in dbh.database.locks:
             dbh.database.locks[ctx.guild.id] = Lock()
@@ -187,6 +194,7 @@ class Settings(commands.Cog):
         brief='Set link-deletes for starboard'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def channel_link_deletes(self, ctx, channel: discord.TextChannel, link_deletes: bool):
         if ctx.guild.id not in dbh.database.locks:
             dbh.database.locks[ctx.guild.id] = Lock()
@@ -200,6 +208,7 @@ class Settings(commands.Cog):
         brief='Add starboard'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def add_channel(self, ctx, channel: discord.TextChannel):
         if channel == None:
             await ctx.send("I could not find any channel with that name or id")
@@ -224,6 +233,7 @@ class Settings(commands.Cog):
         brief='Remove starboard'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def remove_channel(self, ctx, channel: ChannelElseInt):
         if channel == None:
             await ctx.send("I could not find any channel with that name or id")
@@ -245,6 +255,7 @@ class Settings(commands.Cog):
         brief='Add emoji'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def starboard_add_emoji(self, ctx, channel: discord.TextChannel, in_emoji):
         emoji = await functions.get_emoji(ctx.guild, in_emoji)
         if type(emoji) is discord.Emoji:
@@ -264,6 +275,7 @@ class Settings(commands.Cog):
         brief='Remove emoji'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def starboard_remove_emoji(self, ctx, channel: discord.TextChannel, in_emoji):
         emoji = await functions.get_emoji(ctx.guild, in_emoji)
         if type(emoji) is discord.Emoji:
@@ -296,6 +308,7 @@ class Settings(commands.Cog):
         brief='Set required-stars for starboard'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def channel_required_stars(self, ctx, channel: discord.TextChannel, count: int):
         if channel == None:
             await ctx.send("I could not find any channel with that name or id")
@@ -315,6 +328,7 @@ class Settings(commands.Cog):
         brief='Set required-to-lose for starboard'
         )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def channel_required_to_lose(self, ctx, channel: discord.TextChannel, count: int):
         if channel == None:
             await ctx.send("I could not find any channel with that name or id")
@@ -361,6 +375,7 @@ class Settings(commands.Cog):
         name='add', aliases=['a', '+'], brief='Add a media channel', description='Add a media channel'
     )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def add_media_channel(self, ctx, channel: discord.TextChannel):
         if channel is None:
             await ctx.send("I could not find a channel with that name or id")
@@ -381,6 +396,7 @@ class Settings(commands.Cog):
         name='remove', aliases=['r', '-'], brief='Remove media channel', description='Remove media channel'
     )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def remove_media_channel(self, ctx, channel: ChannelElseInt):
         if channel is None:
             await ctx.send("I could not find a channel with that name or id")
@@ -401,6 +417,7 @@ class Settings(commands.Cog):
         description='Adds an emoji for the bot to automatically react to all messages sent in the media channel'
     )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def media_channel_add_emoji(self, ctx, channel: discord.TextChannel, in_emoji):
         emoji = await functions.get_emoji(ctx.guild, in_emoji)
         if type(emoji) is discord.Emoji:
@@ -422,6 +439,7 @@ class Settings(commands.Cog):
         description='Remove an emoji from media channel'
     )
     @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
     async def media_channel_remove_emoji(self, ctx, channel: discord.TextChannel, in_emoji):
         emoji = await functions.get_emoji(ctx.guild, in_emoji)
         if type(emoji) is discord.Emoji:
@@ -456,6 +474,7 @@ class Settings(commands.Cog):
         description='Set wether or not a media channel allows messages without images'
     )
     @commands.has_permissions(manage_channels=True, manage_messages=True)
+    @commands.guild_only()
     async def media_channel_media_only(self, ctx, channel: discord.TextChannel, allow: bool):
         if channel is None:
             await ctx.send("I could not find a channel with that name or id")
