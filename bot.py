@@ -86,8 +86,10 @@ async def ping(ctx):
     )
 async def links(ctx):
     embed = discord.Embed(title='Helpful Links', colour=0xFCFF00)
-    embed.description = f"[**Invite me to your server**]({INVITE})\n[**Join support server**]({SUPPORT_SERVER})\
-        \n[**Documentation**](https://circuitsacul.github.io/StarBot/)"
+    embed.description = f"[**Add me to your server**]({INVITE})\
+        \n[**Join the support server**]({SUPPORT_SERVER})\
+        \n[**View documentation**](https://circuitsacul.github.io/StarBot/)\
+        \n[**View source code**](https://github.com/CircuitSacul/StarBot)"
     await ctx.send(ctx.message.author.mention, embed=embed)
 
 @bot.command(name='info', aliases=['botstats'], description='Bot stats', brief='Bot stats')
