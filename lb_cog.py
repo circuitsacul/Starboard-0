@@ -13,7 +13,7 @@ class Leaderboard(commands.Cog):
         for uid in user_ids:
             string += f"**<@{uid['user']}>: {uid['points']}**"
             if uid is not user_ids[-1]: string += '\n'
-        return string
+        return string if string != '' else 'No one...'
 
     @commands.command(
         name='user', aliases=['u'], brief='View stats for a user',
