@@ -89,7 +89,8 @@ async def parse_leaderboard(guild_id, user_id):
         for x, d in enumerate(new_lb):
             if d['user'] == user_id or d['points'] <= 0:
                 del new_lb[x]
-        new_lb.append(recv_dict)
+        if recv_dict['points'] > 0:
+            new_lb.append(recv_dict)
         new_lb = sorted(new_lb, key=lambda d: d['points'], reverse=True)
         if len(new_lb) > 10:
             new_lb.pop(0)
@@ -100,7 +101,8 @@ async def parse_leaderboard(guild_id, user_id):
         for x, d in enumerate(new_lb):
             if d['user'] == user_id or d['points'] <= 0:
                 del new_lb[x]
-        new_lb.append(give_dict)
+        if give_dict['points'] > 0:
+            new_lb.append(give_dict)
         new_lb = sorted(new_lb, key=lambda d: d['points'], reverse=True)
         if len(new_lb) > 10:
             new_lb.pop(0)
@@ -111,7 +113,8 @@ async def parse_leaderboard(guild_id, user_id):
         for x, d in enumerate(new_lb):
             if d['user'] == user_id or d['points'] <= 0:
                 del new_lb[x]
-        new_lb.append(on_sb_dict)
+        if on_sb_dict['points'] > 0:
+            new_lb.append(on_sb_dict)
         new_lb = sorted(new_lb, key=lambda d: d['points'], reverse=True)
         if len(new_lb) > 10:
             new_lb.pop(0)
