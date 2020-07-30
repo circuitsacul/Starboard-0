@@ -3,6 +3,14 @@ from discord import utils
 import discord
 import asyncio
 from asyncio import Lock, sleep
+from copy import deepcopy
+
+
+async def is_starboard_emoji(guild_id, emoji_str):
+    for starboard in dbh.database.db['guilds'][guild_id]['channels']:
+        if emoji_str in dbh.database.db['guilds'][guild_id]['channels'][starboard]['emojis']:
+            return True
+    return False
 
 
 async def get_emoji(guild, emoji):
@@ -67,6 +75,49 @@ async def parse_user(guild_id, user_id, bot):
     return True
 
 
+async def parse_leaderboard(guild_id, user_id):
+    if guild_id not in dbh.database.locks:
+        dbh.database.locks[guild_id] = Lock()
+
+    async with dbh.database.locks[guild_id]:
+        recv_dict = {'user': user_id, 'points': dbh.database.db['profiles'][user_id]['guild_stats'][guild_id]['received_stars']}
+        give_dict = {'user': user_id, 'points': dbh.database.db['profiles'][user_id]['guild_stats'][guild_id]['given_stars']}
+        on_sb_dict = {'user': user_id, 'points': dbh.database.db['profiles'][user_id]['guild_stats'][guild_id]['on_starboard']}
+
+    async with dbh.database.locks[guild_id]:
+        new_lb = deepcopy(dbh.database.db['guilds'][guild_id]['leaderboard']['top_recv'])
+        for x, d in enumerate(new_lb):
+            if d['user'] == user_id:
+                del new_lb[x]
+        new_lb.append(recv_dict)
+        new_lb = sorted(new_lb, key=lambda d: d['points'], reverse=True)
+        if len(new_lb) > 10:
+            new_lb.pop(0)
+        dbh.database.db['guilds'][guild_id]['leaderboard']['top_recv'] = new_lb
+
+    async with dbh.database.locks[guild_id]:
+        new_lb = deepcopy(dbh.database.db['guilds'][guild_id]['leaderboard']['top_givers'])
+        for x, d in enumerate(new_lb):
+            if d['user'] == user_id:
+                del new_lb[x]
+        new_lb.append(give_dict)
+        new_lb = sorted(new_lb, key=lambda d: d['points'], reverse=True)
+        if len(new_lb) > 10:
+            new_lb.pop(0)
+        dbh.database.db['guilds'][guild_id]['leaderboard']['top_givers'] = new_lb
+
+    async with dbh.database.locks[guild_id]:
+        new_lb = deepcopy(dbh.database.db['guilds'][guild_id]['leaderboard']['top_on_sb'])
+        for x, d in enumerate(new_lb):
+            if d['user'] == user_id:
+                del new_lb[x]
+        new_lb.append(on_sb_dict)
+        new_lb = sorted(new_lb, key=lambda d: d['points'], reverse=True)
+        if len(new_lb) > 10:
+            new_lb.pop(0)
+        dbh.database.db['guilds'][guild_id]['leaderboard']['top_on_sb'] = new_lb
+
+
 async def award_give_star(guild_id, user_id, points, bot):
     done = await parse_user(guild_id, user_id, bot)
     if not done:
@@ -74,6 +125,8 @@ async def award_give_star(guild_id, user_id, points, bot):
     if dbh.database.db['profiles'][user_id]['bot']:
         return
     dbh.database.db['profiles'][user_id]['guild_stats'][guild_id]['given_stars'] += points
+    dbh.database.db['guilds'][guild_id]['leaderboard']['total_given'] += points
+    await parse_leaderboard(guild_id, user_id)
 
 
 async def award_receive_star(guild_id, user_id, points, bot):
@@ -83,6 +136,8 @@ async def award_receive_star(guild_id, user_id, points, bot):
     if dbh.database.db['profiles'][user_id]['bot']:
         return
     dbh.database.db['profiles'][user_id]['guild_stats'][guild_id]['received_stars'] += points
+    dbh.database.db['guilds'][guild_id]['leaderboard']['total_recv'] += points
+    await parse_leaderboard(guild_id, user_id)
 
 
 async def award_on_starboard(guild_id, user_id, points, bot):
@@ -92,6 +147,7 @@ async def award_on_starboard(guild_id, user_id, points, bot):
     if dbh.database.db['profiles'][user_id]['bot']:
         return
     dbh.database.db['profiles'][user_id]['guild_stats'][guild_id]['on_starboard'] += points
+    await parse_leaderboard(guild_id, user_id)
 
 
 async def recount_stars(guild, channel, message_id, bot):
@@ -277,6 +333,7 @@ async def handle_starboard(guild, channel_id, starboard_id, deleted, message_id,
     if link_message is not None:
         if remove:
             await link_message.delete()
+            await award_on_starboard(guild.id, message.author.id, -1, bot)
         else:
             link_edits = starboard_settings['link_edits']
             try:
@@ -284,6 +341,7 @@ async def handle_starboard(guild, channel_id, starboard_id, deleted, message_id,
             except discord.errors.NotFound:
                 pass
     elif add:
+        await award_on_starboard(guild.id, message.author.id, 1, bot)
         await new_link_message(message, starboard, points, starboard_settings['emojis'])
 
 

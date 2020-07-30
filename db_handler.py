@@ -20,7 +20,13 @@ server_db = {
         'messages': {},
         'channels': {},
         'media_channels': {},
-        'leaderboard': {},
+        'leaderboard': {
+            'top_givers': [],
+            'top_recv': [],
+            'top_on_sb': [],
+            'total_given': 0,
+            'total_recv': 0
+        },
         'prefix': 'sb '
         }
 
@@ -47,8 +53,16 @@ class DataBase():
         # checks
         for guild in guilds:
             self.add_guild(guild.id)
-            if 'prefix' not in self.db['guilds'][guild.id]:
-                self.db['guilds'][guild.id]['prefix'] = server_db['prefix']
+            if 'top_givers' not in self.db['guilds'][guild.id]['leaderboard']:
+                self.db['guilds'][guild.id]['leaderboard']['top_givers'] = []
+            if 'top_recv' not in self.db['guilds'][guild.id]['leaderboard']:
+                self.db['guilds'][guild.id]['leaderboard']['top_recv'] = []
+            if 'top_on_sb' not in self.db['guilds'][guild.id]['leaderboard']:
+                self.db['guilds'][guild.id]['leaderboard']['top_on_sb'] = []
+            if 'total_given' not in self.db['guilds'][guild.id]['leaderboard']:
+                self.db['guilds'][guild.id]['leaderboard']['total_given'] = 0
+            if 'total_recv' not in self.db['guilds'][guild.id]['leaderboard']:
+                self.db['guilds'][guild.id]['leaderboard']['total_recv'] = 0
 
     def save_database(self):
         with open(self.path, 'wb') as f:

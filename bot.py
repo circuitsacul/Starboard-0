@@ -6,6 +6,7 @@ from asyncio import sleep, Lock
 from cs_cog import Settings
 from owner_cog import Owner
 from util_cog import Utility
+from lb_cog import Leaderboard
 from pretty_help import PrettyHelp
 import functions
 import converters
@@ -169,6 +170,8 @@ async def on_raw_reaction_add(payload):
     if guild is None:
         return
     user = utils.get(guild.members, id=user_id)
+    channel = utils.get(guild.channels, id=channel_id)
+    message = await channel.fetch_message(message_id)
     if user.bot:
         return
 
@@ -176,6 +179,10 @@ async def on_raw_reaction_add(payload):
         emoji_str = payload.emoji.id
     else:
         emoji_str = payload.emoji.name
+
+    if await functions.is_starboard_emoji(guild_id, emoji_str):
+        await functions.award_give_star(guild_id, user_id, 1, bot)
+        await functions.award_receive_star(guild_id, message.author.id, 1, bot)
 
     if guild_id not in dbh.database.locks:
         dbh.database.locks[guild_id] = Lock()
@@ -210,6 +217,8 @@ async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
     user_id = payload.user_id
     user = utils.get(guild.members, id=user_id)
+    channel = utils.get(guild.channels, id=channel_id)
+    message = await channel.fetch_message(message_id)
     if user.bot:
         return
 
@@ -217,6 +226,10 @@ async def on_raw_reaction_remove(payload):
         emoji_str = payload.emoji.id
     else:
         emoji_str = payload.emoji.name
+
+    if await functions.is_starboard_emoji(guild_id, emoji_str):
+        await functions.award_give_star(guild_id, user_id, -1, bot)
+        await functions.award_receive_star(guild_id, message.author.id, -1, bot)
 
     if guild_id not in dbh.database.locks:
         dbh.database.locks[guild_id] = Lock()
@@ -301,6 +314,7 @@ try:
     bot.add_cog(Settings(bot))
     bot.add_cog(Owner(bot))
     bot.add_cog(Utility(bot))
+    bot.add_cog(Leaderboard(bot))
     if len(sys.argv) > 1:
         if sys.argv[1].lower() == 'beta':
             bot.run(BETA_TOKEN)
