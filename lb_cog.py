@@ -41,8 +41,8 @@ class Leaderboard(commands.Cog):
     async def guild_leaderboard(self, ctx):
         lb = dbh.database.db['guilds'][ctx.guild.id]['leaderboard']
         embed = discord.Embed(title='Leaderboard', color=0xFCFF00)
+        embed.add_field(name='Top on Starboard', value=await self.user_ids_to_mentions(lb['top_on_sb']))
         embed.add_field(name='Top Star Receivers', value=await self.user_ids_to_mentions(lb['top_recv']))
         embed.add_field(name='Top Star Givers', value=await self.user_ids_to_mentions(lb['top_givers']), inline=True)
-        embed.add_field(name='Top on Starboard', value=await self.user_ids_to_mentions(lb['top_on_sb']), inline=True)
         embed.add_field(name='Other Stats', value=f"**Total Stars Given: {lb['total_given']}**")
         await ctx.send(embed=embed)
