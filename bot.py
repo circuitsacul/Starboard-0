@@ -147,21 +147,27 @@ async def on_ready():
     await bot.change_presence(
         status=discord.Status.online
         #activity=discord.Game('Mention me for help')
-        )
+    )
 
 
 @bot.event
 async def on_guild_join(guild):
+    while dbh.database.db is None:
+        await sleep(1)
     dbh.database.add_guild(guild.id)
 
 
 @bot.event
 async def on_guild_remove(guild):
+    while dbh.database.db is None:
+        await sleep(1)
     pass
 
 
 @bot.event
 async def on_raw_reaction_add(payload):
+    while dbh.database.db is None:
+        await sleep(1)
     guild_id = payload.guild_id
     channel_id = payload.channel_id
     message_id = payload.message_id
@@ -209,6 +215,8 @@ async def on_raw_reaction_add(payload):
 
 @bot.event
 async def on_raw_reaction_remove(payload):
+    while dbh.database.db is None:
+        await sleep(1)
     guild_id = payload.guild_id
     guild = bot.get_guild(guild_id)
     if guild is None:
@@ -257,6 +265,8 @@ async def on_raw_reaction_remove(payload):
 
 @bot.event
 async def on_raw_message_delete(payload):
+    while dbh.database.db is None:
+        await sleep(1)
     guild_id = payload.guild_id
     channel_id = payload.channel_id
     message_id = payload.message_id
@@ -274,6 +284,8 @@ async def on_raw_message_delete(payload):
 
 @bot.event
 async def on_message_edit(ctx, message):
+    while dbh.database.db is None:
+        await sleep(1)
     if ctx.guild is None:
         return
     guild_id = ctx.guild.id
@@ -290,6 +302,8 @@ async def on_message_edit(ctx, message):
 
 @bot.event
 async def on_message(message):
+    while dbh.databas.db is None:
+        await sleep(1)
     is_valid = True
 
     if message.guild is not None:
