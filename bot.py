@@ -186,10 +186,6 @@ async def on_raw_reaction_add(payload):
     else:
         emoji_str = payload.emoji.name
 
-    if await functions.is_starboard_emoji(guild_id, emoji_str):
-        await functions.award_give_star(guild_id, user_id, 1, bot)
-        await functions.award_receive_star(guild_id, message.author.id, 1, bot)
-
     if guild_id not in dbh.database.locks:
         dbh.database.locks[guild_id] = Lock()
     async with dbh.database.locks[guild_id]:
@@ -198,7 +194,14 @@ async def on_raw_reaction_add(payload):
                 dbh.database.db['guilds'][guild_id]['messages'][(channel_id, message_id)] = {'emojis': {}, 'links': {}}
             if emoji_str not in dbh.database.db['guilds'][guild_id]['messages'][(channel_id, message_id)]['emojis']:
                 dbh.database.db['guilds'][guild_id]['messages'][(channel_id, message_id)]['emojis'][emoji_str] = {}
+            original = user_id in dbh.database.db['guilds'][guild_id]['messages'][(channel_id, message_id)]['emojis'][emoji_str]
             dbh.database.db['guilds'][guild_id]['messages'][(channel_id, message_id)]['emojis'][emoji_str][user_id] = True
+
+            if original == False:
+                if message.author.id != user_id:
+                    if await functions.is_starboard_emoji(guild_id, emoji_str):
+                        await functions.award_give_star(guild_id, user_id, 1, bot)
+                        await functions.award_receive_star(guild_id, message.author.id, 1, bot)
 
             await functions.update_message(guild_id, channel_id, message_id, bot)
         else:
@@ -208,7 +211,16 @@ async def on_raw_reaction_add(payload):
                     dbh.database.db['guilds'][guild_id]['messages'][(original_channel_id, original_message_id)] = {'emojis': {}, 'links': {}}
                 if emoji_str not in dbh.database.db['guilds'][guild_id]['messages'][(original_channel_id, original_message_id)]['emojis']:
                     dbh.database.db['guilds'][guild_id]['messages'][(original_channel_id, original_message_id)]['emojis'][emoji_str] = {}
+                original = user_id in dbh.database.db['guilds'][guild_id]['messages'][(original_channel_id, original_message_id)]['emojis'][emoji_str]
                 dbh.database.db['guilds'][guild_id]['messages'][(original_channel_id, original_message_id)]['emojis'][emoji_str][user_id] = True
+
+                if original == False:
+                    original_channel = utils.get(guild.channels, id=original_channel_id)
+                    original_message = await original_channel.fetch_message(original_message_id)
+                    if original_message.author.id != user_id:
+                        if await functions.is_starboard_emoji(guild_id, emoji_str):
+                            await functions.award_give_star(guild_id, user_id, 1, bot)
+                            await functions.award_receive_star(guild_id, original_message.author.id, 1, bot)
 
                 await functions.update_message(guild_id, original_channel_id, original_message_id, bot)
 
@@ -235,10 +247,6 @@ async def on_raw_reaction_remove(payload):
     else:
         emoji_str = payload.emoji.name
 
-    if await functions.is_starboard_emoji(guild_id, emoji_str):
-        await functions.award_give_star(guild_id, user_id, -1, bot)
-        await functions.award_receive_star(guild_id, message.author.id, -1, bot)
-
     if guild_id not in dbh.database.locks:
         dbh.database.locks[guild_id] = Lock()
     async with dbh.database.locks[guild_id]:
@@ -249,6 +257,15 @@ async def on_raw_reaction_remove(payload):
                 dbh.database.db['guilds'][guild_id]['messages'][(channel_id, message_id)]['emojis'][emoji_str] = {}
             if user_id in dbh.database.db['guilds'][guild_id]['messages'][(channel_id, message_id)]['emojis'][emoji_str]:
                 del dbh.database.db['guilds'][guild_id]['messages'][(channel_id, message_id)]['emojis'][emoji_str][user_id]
+                original = True
+            else:
+                original = False
+
+            if original is True:
+                if message.author.id != user_id:
+                    if await functions.is_starboard_emoji(guild_id, emoji_str):
+                        await functions.award_give_star(guild_id, user_id, -1, bot)
+                        await functions.award_receive_star(guild_id, message.author.id, -1, bot)
 
             await functions.update_message(guild_id, channel_id, message_id, bot)
 
@@ -259,6 +276,17 @@ async def on_raw_reaction_remove(payload):
                     dbh.database.db['guilds'][guild_id]['messages'][(original_channel_id, original_message_id)]['emojis'][emoji_str] = {}
                 if user_id in dbh.database.db['guilds'][guild_id]['messages'][(original_channel_id, original_message_id)]['emojis'][emoji_str]:
                     del dbh.database.db['guilds'][guild_id]['messages'][(original_channel_id, original_message_id)]['emojis'][emoji_str][user_id]
+                    original = True
+                else:
+                    original = False
+
+                if original == True:
+                    original_channel = utils.get(guild.channels, id=original_channel_id)
+                    original_message = await original_channel.fetch_message(original_message_id)
+                    if original_message.author.id != user_id:
+                        if await functions.is_starboard_emoji(guild_id, emoji_str):
+                            await functions.award_give_star(guild_id, user_id, -1, bot)
+                            await functions.award_receive_star(guild_id, original_message.author.id, -1, bot)
 
                 await functions.update_message(guild_id, original_channel_id, original_message_id, bot)
 
