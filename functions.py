@@ -87,7 +87,7 @@ async def parse_leaderboard(guild_id, user_id):
     async with dbh.database.locks[guild_id]:
         new_lb = deepcopy(dbh.database.db['guilds'][guild_id]['leaderboard']['top_recv'])
         for x, d in enumerate(new_lb):
-            if d['user'] == user_id:
+            if d['user'] == user_id or d['points'] <= 0:
                 del new_lb[x]
         new_lb.append(recv_dict)
         new_lb = sorted(new_lb, key=lambda d: d['points'], reverse=True)
@@ -125,7 +125,10 @@ async def award_give_star(guild_id, user_id, points, bot):
     if dbh.database.db['profiles'][user_id]['bot']:
         return
     dbh.database.db['profiles'][user_id]['guild_stats'][guild_id]['given_stars'] += points
-    dbh.database.db['guilds'][guild_id]['leaderboard']['total_given'] += points
+    if guild_id not in dbh.database.locks:
+        dbh.database.locks[guild_id] = Lock()
+    async with dbh.database.locks[guild_id]:
+        dbh.database.db['guilds'][guild_id]['leaderboard']['total_given'] += points
     await parse_leaderboard(guild_id, user_id)
 
 
