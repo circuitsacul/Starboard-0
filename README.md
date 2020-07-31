@@ -11,6 +11,8 @@ StarBot is a free, advanced, and highly-customizable starboard bot. This documen
  - Easy to use configuration, with default settings and per-starboard settings
  - Image-only channels
  - Auto-star channels
+ - Server leaderboard
+ - User stats
  - Completely free
 
 (I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.)
@@ -87,5 +89,9 @@ This bot is easy to set up and get going. The following directions are very spec
      - addemoji: Adds an emoji for the bot to automatically to react to all messages in channel with `mediachannel addemoji <channel> <emoji>`
      - removeemoji: Removes an emoji from media channel `mediachannel removeemoji <channel> <emoji>`
    - prefix: Change bot prefix `prefix <prefix> [has_space=False]`
- - Utility	
+ - Utility:
    - recount: Recounts the emojis on a message `recount <channel> <message_id>`
+ - Leaderboard:
+   - leaderboard: View the top users of the server and other stats `leaderboard`
+     - reset: Reset the leaderboard for a server `leaderboard reset`
+   - user: View stats for a user, such as stars given, received, etc. `user [username, id, or mention]`
