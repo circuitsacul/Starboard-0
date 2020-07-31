@@ -25,6 +25,8 @@ Some things you should know before reading this section:
  - Arguments inside `<, >` (`<argument>`) are required arguments. You *must* set these, and not doing so will cause an error
  - If you see multiple arguments inside of brackets (`[channel_id|channel_name]`), that means that you *can* set *one* or none of those arguments (never more than 1).
  - If you see multiple arguments inside of `<, >` (`<seconds|hours>`), that means you *must* set one of the arguments, no more, no less.
+ - I added command aliases to make using the bot quicker. After each command, there is a description, example usage, as well as aliases.
+   - commandName: Command description `commandName <how> <to> <use>` `cn <h> <t> <u>`
 
 Here is an example command: Say you wanted to make the bot repeat the word "hello" 10 times. The command to do this is `!repeat <word> [number_of_times=1]`. You would type `!repeat hello 10`. Notice how one of the arguments is inside of the `</>`, while another is inside of the `[/]`? The ones inside the square brackets are `optional arguments`. They have a default value, so you don't always have to type it out. For example, typing `!repeat hello` would repeat the word 1 time, because the default value for `number_of_times` is 1. The other argument, inside of the `</>`, is a required argument. If you don't set it, it will raise an error.
 
@@ -66,32 +68,32 @@ This bot is easy to set up and get going. The following directions are very spec
    - ping: Get bot latency `ping`
    - suggest: Send suggestion to me	`suggest <suggestion>`
  - Settings:	
-   - starboard: List starboards	`starboard`
-     - add: Add a starboard	`starboard add <channel>`
-     - remove: Remove a starboard	`starboard remove <starboard>`
-     - addemoji: Add emoji to starboard	`starboard addemoji <starboard> <emoji>`
-     - removeemoji: Remove emoji from starboard	`starboard removeemoji <starboard> <emoji>`
-     - linkdeletes: Set link-deletes for starboard	`starboard linkdeletes <starboard> <true|false>`
-     - linkedits: Set link-edits for starboard	`starboard linkedits <starboard> <true|false>`
-     - requiredstars: Set required-stars for starboard	`starboard requiredstars <starboard> <required_stars>`
-     - requiredtolose: Set required-to-lose for starboard	`starboard requiredtolose <starboard> <required_to_lose>`
-     - selfstar: Set self-star for starboard	`starboard selfstar <starboard> <true|false>`
-   - defaults: View default settings for starboards	`defaults`
-     - linkdeletes: Set default for linkEdits	`defaults linkdeletes <true|false>`
-     - linkedits: Set default for linkDeletes	`defaults linkedits <true|false>`
-     - requiredstars: Set default for requiredStars	`defaults requiredstars <required_stars>`
-     - requiredtolose: Set default for requiredToLose	`defaults requiredtolose <required_to_lose>`
-     - selfstar: Set default for selfStar	`defaults selfstar <true|false>`
-   - mediachannel: List all media-channels `mediachannel`
-     - add: Add a new media channel `mediachannel add <channel>`
-     - remove: Remove a media channel `mediachannel remove <channel>`
-     - mediaonly: Wether or not to delete messages that don't include attachments `mediachannel mediaonly <channel> <true|false>`
-     - addemoji: Adds an emoji for the bot to automatically to react to all messages in channel with `mediachannel addemoji <channel> <emoji>`
-     - removeemoji: Removes an emoji from media channel `mediachannel removeemoji <channel> <emoji>`
+   - starboard: List starboards	`starboard` `s`
+     - add: Add a starboard	`starboard add <channel>` `s a <channel>`
+     - remove: Remove a starboard	`starboard remove <starboard>` `s r <starboard>`
+     - addemoji: Add emoji to starboard	`starboard addemoji <starboard> <emoji>` `s ae <starboard> <emoji>`
+     - removeemoji: Remove emoji from starboard	`starboard removeemoji <starboard> <emoji>` `s re <starboard> <emoji>`
+     - linkdeletes: Set link-deletes for starboard	`starboard linkdeletes <starboard> <true|false>` `s ld <starboard> <true|false>`
+     - linkedits: Set link-edits for starboard	`starboard linkedits <starboard> <true|false>` `s le <starboard> <true|false>`
+     - requiredstars: Set required-stars for starboard	`starboard requiredstars <starboard> <required_stars>` `s rs <starboard> <required_stars`
+     - requiredtolose: Set required-to-lose for starboard	`starboard requiredtolose <starboard> <required_to_lose>` `s rtl <starboard> <required_to_lose>`
+     - selfstar: Set self-star for starboard	`starboard selfstar <starboard> <true|false>` `s ss <starboard> <true|false>`
+   - defaults: View default settings for starboards	`defaults` `d`
+     - linkdeletes: Set default for linkDeletes	`defaults linkdeletes <true|false>` `d ld <true|false>`
+     - linkedits: Set default for linkEdits	`defaults linkedits <true|false>` `d le <true|false>`
+     - requiredstars: Set default for requiredStars	`defaults requiredstars <required_stars>` `d rs <required_stars>`
+     - requiredtolose: Set default for requiredToLose	`defaults requiredtolose <required_to_lose>` `d rtl <required_to_lose>`
+     - selfstar: Set default for selfStar	`defaults selfstar <true|false>` `d ss <true|false>`
+   - mediachannel: List all media-channels `mediachannel` `mc`
+     - add: Add a new media channel `mediachannel add <channel>` `mc a <channel>`
+     - remove: Remove a media channel `mediachannel remove <channel>` `mc r <channel>`
+     - mediaonly: Wether or not to delete messages that don't include attachments `mediachannel mediaonly <channel> <true|false>` `mc mo <channel> <true|false>`
+     - addemoji: Adds an emoji for the bot to automatically to react to all messages with `mediachannel addemoji <channel> <emoji>` `mc ae <channel> <emoji>`
+     - removeemoji: Removes an emoji from media channel `mediachannel removeemoji <channel> <emoji>` `mc re <channel> <emoji>`
    - prefix: Change bot prefix `prefix <prefix> [has_space=False]`
  - Utility:
    - recount: Recounts the emojis on a message `recount <channel> <message_id>`
  - Leaderboard:
-   - leaderboard: View the top users of the server and other stats `leaderboard`
-     - reset: Reset the leaderboard for a server `leaderboard reset`
-   - user: View stats for a user, such as stars given, received, etc. `user [username, id, or mention]`
+   - leaderboard: View the top users of the server and other stats `leaderboard` `lb`
+     - reset: Reset the leaderboard for a server `leaderboard reset` `lb reset`
+   - user: View stats for a user, such as stars given, received, etc. `user [username, id, or mention]` `u [username, id, or mention]`
