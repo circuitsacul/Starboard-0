@@ -65,7 +65,7 @@ class Leaderboard(commands.Cog):
                 return False
             return True
 
-        await ctx.send("Type \"confirm\" to cofirm resetting the database.")
+        await ctx.send("Type \"confirm\" to cofirm resetting the leaderboard.")
         
         try:
             message = await self.bot.wait_for('message', check=check)
