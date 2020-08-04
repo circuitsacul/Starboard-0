@@ -45,10 +45,42 @@ class Leaderboard(commands.Cog):
     async def guild_leaderboard(self, ctx):
         lb = dbh.database.db['guilds'][ctx.guild.id]['leaderboard']
         embed = discord.Embed(title='Leaderboard', color=0xFCFF00)
-        embed.add_field(name='Top Star Receivers', value=await self.user_ids_to_mentions(lb['top_recv']), inline=False)
-        embed.add_field(name='Top Star Givers', value=await self.user_ids_to_mentions(lb['top_givers']), inline=False)
-        embed.add_field(name='Top on Starboard', value=await self.user_ids_to_mentions(lb['top_on_sb']), inline=False)
+        embed.add_field(name='Top Star Receivers', value=await self.user_ids_to_mentions(lb['top_recv'][:2]), inline=False)
+        embed.add_field(name='Top Star Givers', value=await self.user_ids_to_mentions(lb['top_givers'][:2]), inline=False)
+        embed.add_field(name='Top on Starboard', value=await self.user_ids_to_mentions(lb['top_on_sb'][:2]), inline=False)
         embed.add_field(name='Other Stats', value=f"**Total Stars Given: {lb['total_given']}**", inline=False)
+        await ctx.send(embed=embed)
+
+    @guild_leaderboard.command(
+        name='received', aliases=['r', 'recv'], brief='View top star receivers',
+        description='View top star receivers'
+    )
+    @commands.guild_only()
+    async def star_receive_leaderboard(self, ctx):
+        lb = dbh.database.db['guilds'][ctx.guild.id]['leaderboard']['top_recv']
+        embed = discord.Embed(title='Top Star Receivers', color=0xFCFF00)
+        embed.description = await self.user_ids_to_mentions(lb)
+        await ctx.send(embed=embed)
+
+    @guild_leaderboard.command(
+        name='given', aliases=['g'], brief='View top star givers', description='View top star givers'
+    )
+    @commands.guild_only()
+    async def star_giver_leaderboard(self, ctx):
+        lb = dbh.database.db['guilds'][ctx.guild.id]['leaderboard']['top_givers']
+        embed = discord.Embed(title='Top Star Givers', color=0xFCFF00)
+        embed.description = await self.user_ids_to_mentions(lb)
+        await ctx.send(embed=embed)
+
+    @guild_leaderboard.command(
+        name='starboard', aliases=['messages', 's'], brief='View top messages on starboard',
+        description="View the people with the most number of messages on the starboard"
+    )
+    @commands.guild_only()
+    async def on_starboard_leaderboard(self, ctx):
+        lb = dbh.database.db['guilds'][ctx.guild.id]['leaderboard']['top_on_sb']
+        embed = discord.Embed(title='Top On Starboard', color=0xFCFF00)
+        embed.description = await self.user_ids_to_mentions(lb)
         await ctx.send(embed=embed)
 
     @guild_leaderboard.command(
@@ -58,7 +90,6 @@ class Leaderboard(commands.Cog):
     @commands.has_permissions(manage_channels=True)
     async def reset_leaderboard(self, ctx):
         def check(message):
-            print("Check Called")
             if message.author.id != ctx.message.author.id:
                 return False
             if message.content == ctx.message.content:

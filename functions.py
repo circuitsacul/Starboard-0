@@ -42,7 +42,7 @@ async def get_emoji_str(guild, emojis):
 async def get_prefix(bot, message):
     if message.guild is None:
         return discord.ext.commands.when_mentioned_or('sb ')(bot, message)
-    prefix = dbh.database.db['guilds'][message.guild.id]['prefix']
+    prefix = dbh.database.db['guilds'][message.guild.id]['prefix'].lower()
     return discord.ext.commands.when_mentioned_or(prefix)(bot, message)
 
 

@@ -335,7 +335,7 @@ async def on_message(message):
     is_valid = True
 
     if message.guild is not None:
-        prefix = dbh.database.db['guilds'][message.guild.id]['prefix']
+        prefix = dbh.database.db['guilds'][message.guild.id]['prefix'].lower()
         if message.channel.id in dbh.database.db['guilds'][message.guild.id]['media_channels']:
             is_valid = await functions.handle_media_channel(message.guild, message.channel.id, message)
     else:
@@ -348,6 +348,7 @@ async def on_message(message):
         if bot.user.mention == message.content.split()[0].replace('!', '') and len(message.content.split()) == 1:
             await message.channel.send(f"The prefix here is `{prefix}`\nCall `{prefix}help` for help with commands or `{prefix}links` for helpful links.")
         else:
+            message.content = message.content[0].lower() + message.content[1:] if len(message.content) > 1 else message.content[0].lower()
             await bot.process_commands(message)
 
 
