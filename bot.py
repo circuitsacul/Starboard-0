@@ -177,7 +177,10 @@ async def on_raw_reaction_add(payload):
         return
     user = utils.get(guild.members, id=user_id)
     channel = utils.get(guild.channels, id=channel_id)
-    message = await channel.fetch_message(message_id)
+    try:
+        message = await channel.fetch_message(message_id)
+    except discord.errors.NotFound:
+        message = None
     if user.bot:
         return
 
@@ -198,10 +201,11 @@ async def on_raw_reaction_add(payload):
             dbh.database.db['guilds'][guild_id]['messages'][(channel_id, message_id)]['emojis'][emoji_str][user_id] = True
 
             if original == False:
-                if message.author.id != user_id:
-                    if await functions.is_starboard_emoji(guild_id, emoji_str):
-                        await functions.award_give_star(guild_id, user_id, 1, bot)
-                        await functions.award_receive_star(guild_id, message.author.id, 1, bot)
+                if message is not None:
+                    if message.author.id != user_id:
+                        if await functions.is_starboard_emoji(guild_id, emoji_str):
+                            await functions.award_give_star(guild_id, user_id, 1, bot)
+                            await functions.award_receive_star(guild_id, message.author.id, 1, bot)
 
             await functions.update_message(guild_id, channel_id, message_id, bot)
         else:
@@ -215,12 +219,18 @@ async def on_raw_reaction_add(payload):
                 dbh.database.db['guilds'][guild_id]['messages'][(original_channel_id, original_message_id)]['emojis'][emoji_str][user_id] = True
 
                 if original == False:
-                    original_channel = utils.get(guild.channels, id=original_channel_id)
-                    original_message = await original_channel.fetch_message(original_message_id)
-                    if original_message.author.id != user_id:
-                        if await functions.is_starboard_emoji(guild_id, emoji_str):
-                            await functions.award_give_star(guild_id, user_id, 1, bot)
-                            await functions.award_receive_star(guild_id, original_message.author.id, 1, bot)
+                    try:
+                        original_channel = utils.get(guild.channels, id=original_channel_id)
+                        original_message = await original_channel.fetch_message(original_message_id)
+                    except discord.errors.NotFound:
+                        pass
+                    except AttributeError:
+                        pass
+                    else:
+                        if original_message.author.id != user_id:
+                            if await functions.is_starboard_emoji(guild_id, emoji_str):
+                                await functions.award_give_star(guild_id, user_id, 1, bot)
+                                await functions.award_receive_star(guild_id, original_message.author.id, 1, bot)
 
                 await functions.update_message(guild_id, original_channel_id, original_message_id, bot)
 
@@ -238,7 +248,10 @@ async def on_raw_reaction_remove(payload):
     user_id = payload.user_id
     user = utils.get(guild.members, id=user_id)
     channel = utils.get(guild.channels, id=channel_id)
-    message = await channel.fetch_message(message_id)
+    try:
+        message = await channel.fetch_message(message_id)
+    except discord.errors.NotFound:
+        message = None
     if user.bot:
         return
 
@@ -262,10 +275,11 @@ async def on_raw_reaction_remove(payload):
                 original = False
 
             if original is True:
-                if message.author.id != user_id:
-                    if await functions.is_starboard_emoji(guild_id, emoji_str):
-                        await functions.award_give_star(guild_id, user_id, -1, bot)
-                        await functions.award_receive_star(guild_id, message.author.id, -1, bot)
+                if message is not None:
+                    if message.author.id != user_id:
+                        if await functions.is_starboard_emoji(guild_id, emoji_str):
+                            await functions.award_give_star(guild_id, user_id, -1, bot)
+                            await functions.award_receive_star(guild_id, message.author.id, -1, bot)
 
             await functions.update_message(guild_id, channel_id, message_id, bot)
 
@@ -281,12 +295,18 @@ async def on_raw_reaction_remove(payload):
                     original = False
 
                 if original == True:
-                    original_channel = utils.get(guild.channels, id=original_channel_id)
-                    original_message = await original_channel.fetch_message(original_message_id)
-                    if original_message.author.id != user_id:
-                        if await functions.is_starboard_emoji(guild_id, emoji_str):
-                            await functions.award_give_star(guild_id, user_id, -1, bot)
-                            await functions.award_receive_star(guild_id, original_message.author.id, -1, bot)
+                    try:
+                        original_channel = utils.get(guild.channels, id=original_channel_id)
+                        original_message = await original_channel.fetch_message(original_message_id)
+                    except discord.errors.NotFound:
+                        original_message = None
+                    except AttributeError:
+                        pass
+                    else:
+                        if original_message.author.id != user_id:
+                            if await functions.is_starboard_emoji(guild_id, emoji_str):
+                                await functions.award_give_star(guild_id, user_id, -1, bot)
+                                await functions.award_receive_star(guild_id, original_message.author.id, -1, bot)
 
                 await functions.update_message(guild_id, original_channel_id, original_message_id, bot)
 
