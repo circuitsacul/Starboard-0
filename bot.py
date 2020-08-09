@@ -91,7 +91,7 @@ async def links(ctx):
         \n[**Join the support server**]({SUPPORT_SERVER})\
         \n[**View documentation**](https://circuitsacul.github.io/StarBot/)\
         \n[**View source code**](https://github.com/CircuitSacul/StarBot)"
-    await ctx.send(ctx.message.author.mention, embed=embed)
+    await ctx.send(embed=embed)
 
 @bot.command(name='info', aliases=['botstats'], description='Bot stats', brief='Bot stats')
 async def stats_for_bot(ctx):
@@ -109,7 +109,7 @@ async def stats_for_bot(ctx):
         **Ping:** {round(bot.latency*1000, 3)} ms
         """
         )
-    await ctx.send(ctx.message.author.mention, embed=embed)
+    await ctx.send(embed=embed)
 
 
 @bot.event
