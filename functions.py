@@ -88,7 +88,7 @@ async def parse_leaderboard(guild_id, user_id):
         new_lb.append(recv_dict)
     new_lb = sorted(new_lb, key=lambda d: d['points'], reverse=True)
     if len(new_lb) > 10:
-        new_lb.pop(0)
+        new_lb.pop(-1)
     dbh.database.db['guilds'][guild_id]['leaderboard']['top_recv'] = new_lb
 
     new_lb = deepcopy(dbh.database.db['guilds'][guild_id]['leaderboard']['top_givers'])
@@ -99,7 +99,7 @@ async def parse_leaderboard(guild_id, user_id):
         new_lb.append(give_dict)
     new_lb = sorted(new_lb, key=lambda d: d['points'], reverse=True)
     if len(new_lb) > 10:
-        new_lb.pop(0)
+        new_lb.pop(-1)
     dbh.database.db['guilds'][guild_id]['leaderboard']['top_givers'] = new_lb
 
     new_lb = deepcopy(dbh.database.db['guilds'][guild_id]['leaderboard']['top_on_sb'])
@@ -110,7 +110,7 @@ async def parse_leaderboard(guild_id, user_id):
         new_lb.append(on_sb_dict)
     new_lb = sorted(new_lb, key=lambda d: d['points'], reverse=True)
     if len(new_lb) > 10:
-        new_lb.pop(0)
+        new_lb.pop(-1)
     dbh.database.db['guilds'][guild_id]['leaderboard']['top_on_sb'] = new_lb
 
 
