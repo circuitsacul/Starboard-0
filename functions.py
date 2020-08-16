@@ -201,7 +201,7 @@ async def get_embed_from_message(message):
                 urls.append(("Embeded Image", msg_embed.url))
         elif msg_embed.type == 'gifv':
             if msg_embed.url != discord.Embed.Empty:
-                urls.append(("Embeded GIF", msg_embed.url))
+                urls.append(("Embeded GIF", msg_embed.thumbnail.url))
         elif msg_embed.type == 'video':
             if msg_embed.url != discord.Embed.Empty:
                 urls.append(("Embeded Video", msg_embed.url))
