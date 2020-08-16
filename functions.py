@@ -219,7 +219,7 @@ async def get_embed_from_message(message):
         current = 0
         for item in urls:
             url_string += f"[**{item[0]}**]({item[1]})\n"
-            if item[0].endswith('GIF') or item[0].endswith('Image'):
+            if item[1].endswith('png') or item[1].endswith('jpg') or item[1].endswith('jpeg') or item[1].endswith('gif') or item[0].endswith('GIF') or item[0].endswith('Image'):
                 if current == 0:
                     embed.set_image(url=item[1])
                     current += 1
