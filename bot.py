@@ -25,11 +25,10 @@ else:
     bot = Bot(command_prefix=PREFIXES, help_command=PrettyHelp(color=0xFCFF00))
 
 running = True
-database = None
 
 
 async def loop_save():
-    while dbh.database.db is None:
+    while dbh.database is None:
         await sleep(5)
     while running:
         await sleep(60)
@@ -140,9 +139,7 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_ready():
-    global database
     if dbh.database is None:
-        print("Setting Database")
         dbh.set_database(bot)
         bot.loop.create_task(loop_save())
     print(f"Logged in as {bot.user.name} in {len(bot.guilds)} guilds!")
