@@ -141,8 +141,10 @@ async def on_command_error(ctx, error):
 @bot.event
 async def on_ready():
     global database
-    dbh.set_database(bot)
-    bot.loop.create_task(loop_save())
+    if dbh.database is None:
+        print("Setting Database")
+        dbh.set_database(bot)
+        bot.loop.create_task(loop_save())
     print(f"Logged in as {bot.user.name} in {len(bot.guilds)} guilds!")
     await bot.change_presence(
         status=discord.Status.online
