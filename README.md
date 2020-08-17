@@ -18,7 +18,7 @@ StarBot is a free, advanced, and highly-customizable starboard bot. This documen
 (I plan to bring many more features, such as role awards, advanced whitelisting and blacklisting, etc. If you have any suggestions for what features you would like to see, you can use the `suggest <suggestion>` command.)
 
 ## How to Read This:
-Some things you should know before reading this section:
+Some things you should know before reading the docs:
  - Don't actually type `<, >, [, ]`
  - Words found inside of these symbols (`[argument]]` or `<argument>`) are called arguments.
  - Arguments inside square brackets (`[argument]`) are optional arguments. You *can* set them, but you don't *have* to.
@@ -33,7 +33,7 @@ Here is an example command: Say you wanted to make the bot repeat the word "hell
 ## Setup:
 This bot is easy to set up and get going. The following directions are very specific and mostly so you can see how it works, but also gives you an idea of how to configure it for your needs. If you need further help, you can join the [support server](https://discord.gg/3gK8mSA).
  1. [Invite](https://discord.com/api/oauth2/authorize?client_id=700796664276844612&permissions=117824&scope=bot) the bot to your server.
- 2. Create a channel called `#starboard` by typing (or whatever you want to name it)
+ 2. Create a channel called `#starboard` (or whatever you want to name it)
  3. Type `sb starboard add <channel>` to add the starboard.
  4. Type `sb starboard requiredstars <starboard> 1` (Setting the number of stars for a message to get on the starboard to 1, so you can test it easily.
  5. Type `sb starboard selfstar <starboard> true` (This allows you to star your own messages, otherwise it would be hard to test the bot)
