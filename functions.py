@@ -196,6 +196,21 @@ async def get_embed_from_message(message):
             embed_text += f"{msg_embed.description}\n"
             for name, value in fields:
                 embed_text += name + value
+            if msg_embed.footer.text is not embed.Empty:
+                print(msg_embed.footer.text)
+                embed_text += '\n' + str(msg_embed.footer.text) + '\n'
+            if msg_embed.image.url is not embed.Empty:
+                urls.append({
+                    'name': 'Embed Image',
+                    'url': msg_embed.image.url,
+                    'display_url': msg_embed.image.url
+                })
+            if msg_embed.thumbnail.url is not embed.Empty:
+                urls.append({
+                    'name': 'Embed Thumbnail',
+                    'url': msg_embed.thumbnail.url,
+                    'display_url': msg_embed.thumbnail.url
+                })
         elif msg_embed.type == 'image':
             if msg_embed.url != discord.Embed.Empty:
                 urls.append({'name': 'Image', 'display_url': msg_embed.thumbnail.url, 'url': msg_embed.url, 'type': 'image'})
@@ -212,7 +227,7 @@ async def get_embed_from_message(message):
         full_string = value_string[0:800] + "... *message clipped*\n" + context_string
     else:
         full_string = value_string + context_string
-    embed.add_field(name=f'Message{" (NSFW)" if nsfw else ""}', value=full_string)
+    embed.description = full_string
 
     if len(urls) > 0:
         url_string = ''
