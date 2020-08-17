@@ -1,5 +1,5 @@
 # StarBot
-StarBot is a free, advanced, and highly-customizable starboard bot. This documentation gives you a quick start to using the bot, as well as listing all the available commands. If you see a problem, please let me know. You can use the bots `suggest` command, or you can join the support server. My discord username is `CircuitSacul#5585`.
+StarBot is a free, advanced, and highly-customizable starboard bot. This documentation gives you a quick start to using the bot, as well as listing all the available commands. If you see a problem, please let me know. You can use the bots `suggest` command, or you can join the support server. My discord username is `@CircuitSacul#5585`.
 
 [Invite StarBot to your server](https://discord.com/api/oauth2/authorize?client_id=700796664276844612&permissions=117824&scope=bot)
 
@@ -8,7 +8,7 @@ StarBot is a free, advanced, and highly-customizable starboard bot. This documen
 ## Bot Features:
  - Supports multiple starboards
  - Supports multiple normal and custom emojis for *each* starboard
- - Easy to use configuration, with default settings and per-starboard settings
+ - Has default settings and per-starboard settings
  - Image-only channels
  - Auto-star channels
  - Server leaderboard
