@@ -8,7 +8,7 @@ StarBot is a free, advanced, and highly-customizable starboard bot. This documen
 ## Bot Features:
  - Supports multiple starboards
  - Supports multiple normal and custom emojis for *each* starboard
- - Easy to use configuration, with default settings and per-starboard settings
+ - Has default settings and per-starboard settings
  - Image-only channels
  - Auto-star channels
  - Server leaderboard
