@@ -187,7 +187,7 @@ async def get_embed_from_message(message):
     urls = []
 
     for attachment in msg_attachments:
-        urls.append((attachment.filename, attachment.url))
+        urls.append({'name': attachment.filename, 'display_url': attachment.url, 'url': attachment.url, 'type': 'upload'})
 
     for msg_embed in message.embeds:
         if msg_embed.type == 'rich':
@@ -198,13 +198,13 @@ async def get_embed_from_message(message):
                 embed_text += name + value
         elif msg_embed.type == 'image':
             if msg_embed.url != discord.Embed.Empty:
-                urls.append(("Embeded Image", msg_embed.url))
+                urls.append({'name': 'Image', 'display_url': msg_embed.thumbnail.url, 'url': msg_embed.url, 'type': 'image'})
         elif msg_embed.type == 'gifv':
             if msg_embed.url != discord.Embed.Empty:
-                urls.append(("Embeded GIF", msg_embed.thumbnail.url))
+                urls.append({'name': 'GIF', 'display_url': msg_embed.thumbnail.url, 'url': msg_embed.url, 'type': 'gif'})
         elif msg_embed.type == 'video':
             if msg_embed.url != discord.Embed.Empty:
-                urls.append(("Embeded Video", msg_embed.url))
+                urls.append({'name': 'Video', 'display_url': msg_embed.thumbnail.url, 'url': msg_embed.url, 'type': 'video'})
 
     value_string = f"{message.content}\n{embed_text}"
     context_string = f"\n[**Jump to Message**]({message.jump_url})"
@@ -218,14 +218,13 @@ async def get_embed_from_message(message):
         url_string = ''
         current = 0
         for item in urls:
-            url_string += f"[**{item[0]}**]({item[1]})\n"
-            if item[1].endswith('png') or item[1].endswith('jpg') or item[1].endswith('jpeg') or item[1].endswith('gif') or item[0].endswith('GIF') or item[0].endswith('Image'):
-                if current == 0:
-                    embed.set_image(url=item[1])
-                    current += 1
-                elif current == 1:
-                    embed.set_thumbnail(url=item[1])
-                    current += 1
+            url_string += f"[**{item['name']}**]({item['url']})\n"
+            if current == 0:
+                embed.set_image(url=item['display_url'])
+                current += 1
+            elif current == 1:
+                embed.set_thumbnail(url=item['display_url'])
+                current += 1
         embed.add_field(name='Attachments', value=url_string, inline=False)
 
     embed.set_footer(text=f"{message.id} • {str(message.created_at).split(' ', 1)[0].replace('-', '/')}")
