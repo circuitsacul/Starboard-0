@@ -1,5 +1,5 @@
 # StarBot
-Note: This bot uses dictionaries as its "database". I've recently learned more about SQL, so I decided to rewrite my bot. Most likely this bot will no longer be maintained. You can find the new bot [here](https://github.com/CircuitSacul/Starboard).
+⚠️Warning⚠️: This bot uses dictionaries as its "database". I've recently learned more about SQL, so I decided to rewrite my bot. Most likely this bot will no longer be maintained. You can find the new bot [here](https://github.com/CircuitSacul/Starboard).
 
 StarBot is a free, advanced, and highly-customizable starboard bot. This documentation gives you a quick start to using the bot, as well as listing all the available commands. If you see a problem, please let me know. You can use the bots `suggest` command, or you can join the support server. My discord username is `@CircuitSacul#5585`.
 
