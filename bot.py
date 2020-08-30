@@ -18,12 +18,14 @@ BETA_PREFIXES = functions.get_prefix
 DOWNVOTE = '⬇️'
 UPVOTE = '⬆️'
 
-if len(sys.argv) > 1:
+if len(sys.argv) == 0:
+    bot = Bot(command_prefix=PREFIXES, help_command=PrettyHelp(color=0xFCFF00))
+else:
     if sys.argv[1].lower() == 'beta':
         bot = Bot(command_prefix=BETA_PREFIXES, help_command=PrettyHelp(color=0xFCFF00))
-else:
-    bot = Bot(command_prefix=PREFIXES, help_command=PrettyHelp(color=0xFCFF00))
-
+    else:
+        print("Invalid Argument. Did you mean \"beta\"?")
+        exit()
 running = True
 
 
